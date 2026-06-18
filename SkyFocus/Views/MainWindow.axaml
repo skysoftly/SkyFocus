@@ -85,6 +85,8 @@
                             </Border>
                             <Border Grid.Column="2" Classes="Tile">
 
+                                <ContentControl Content="{Binding AppInfo}" />
+
                             </Border>
 
                             <GridSplitter Grid.Column="1"

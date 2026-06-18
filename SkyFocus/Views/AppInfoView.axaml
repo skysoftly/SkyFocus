@@ -1,0 +1,46 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             xmlns:controls="clr-namespace:SkyFocus.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkyFocus.Views.AppInfoView"
+             x:DataType="vm:AppInfoViewModel">
+    
+    <Design.DataContext>
+        <vm:AppInfoViewModel />
+    </Design.DataContext>
+    
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/MainStyles.axaml" />
+    </UserControl.Styles>
+    
+    <Grid ColumnDefinitions="* *" RowDefinitions="Auto *" Margin="5">
+          <!-- IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}"> -->
+        <StackPanel Orientation="Vertical" Margin="20" Spacing="30">
+            <StackPanel Orientation="Horizontal" Spacing="30" Margin="10">
+                <!-- <Image Source="{Binding App?.Icon}" Height="40" Width="40" /> -->
+                <StackPanel>
+                    <TextBlock Text="{Binding SelectedApp?.Name}" FontSize="20" />
+                </StackPanel>
+            </StackPanel>
+            <Grid ColumnDefinitions="* 50" ColumnSpacing="10">
+                <Button Grid.Column="0" 
+                        Classes="app-toggle-button"
+                        HorizontalAlignment="Stretch"
+                        Height="50"
+                        Command="{Binding ToggleAppCommand}">
+                    <controls:StateTextBlock
+                        ActiveText="✕ Закрыть"
+                        InactiveText="▶ Запустить"
+                        IsChecked="{Binding SelectedApp?.IsRunning}" />
+                </Button>
+                <!-- <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="50" -->
+                <!--         Content="-" -->
+                <!--         Command="{Binding DeleteAppCommand}" /> -->
+            </Grid>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
