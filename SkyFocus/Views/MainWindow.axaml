@@ -1,0 +1,153 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utils="clr-namespace:SkyFocus.Utils"
+        xmlns:controls="clr-namespace:SkyFocus.Controls"
+        xmlns:vm="using:SkyFocus.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="SkyFocus.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/icon.ico"
+        Title="SkyFocus"
+        WindowDecorations="None"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="40">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <StyleInclude Source="/Styles/MainStyles.axaml" />
+    </Window.Styles>
+
+    <Grid>
+        <Image Source="/Assets/bg.jpg" Stretch="UniformToFill" />
+        <Border Classes="Overlay"
+                Margin="0,0,8,0">
+            <Grid RowDefinitions="40 * 40">
+                <Grid Grid.Row="0" ColumnDefinitions="50 * Auto"
+                      Background="#00000000"
+                      PointerPressed="DragWindow">
+                    <Image Grid.Column="0" Source="/Assets/icon.png" Margin="5" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="SkyFocus" />
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                Spacing="5">
+
+                        <Button Content="─" Click="Minimize"/>
+                        <Button Content="□" Click="MaxRestore"/>
+                        <Button Content="✕" Click="CloseWindow"/>
+
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1" RowDefinitions="65 *" 
+                      ColumnDefinitions="50 *">
+                    
+                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal"
+                                Spacing="5">
+                        <Button Classes="btn-primary" Width="120" Height="35"
+                                HorizontalContentAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="10"
+                                        Height="14">
+                                <Image Source="/Assets/Icons/plus.png" />
+                                <TextBlock Text="Добавить" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <Grid Grid.Column="1" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" MinHeight="160" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="*" MinHeight="160" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MinWidth="240" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="2*" MinWidth="240" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Classes="Tile">
+
+                                <ContentControl Content="{Binding AppsList}" />
+
+                            </Border>
+                            <Border Grid.Column="2" Classes="Tile">
+
+                            </Border>
+
+                            <GridSplitter Grid.Column="1"
+                                          Classes="TileSplitter VerticalTileSplitter"
+                                          ResizeDirection="Columns" />
+                        </Grid>
+
+                        <GridSplitter Grid.Row="1"
+                                      Classes="TileSplitter HorizontalTileSplitter"
+                                      ResizeDirection="Rows" />
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MinWidth="240" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="*" MinWidth="240" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Classes="Tile">
+
+                            </Border>
+                            <Border Grid.Column="2" Classes="Tile">
+
+                            </Border>
+
+                            <GridSplitter Grid.Column="1"
+                                          Classes="TileSplitter VerticalTileSplitter"
+                                          ResizeDirection="Columns" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2"
+                      VerticalAlignment="Center" Margin="5"
+                      ColumnDefinitions="Auto *"
+                      ColumnSpacing="10">
+                    <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color" />
+                            <controls:StateTextBlock ActiveText="Отслеживание активно"
+                                                     InactiveText="Отслеживание неактивно" Classes="caption" />
+                        </StackPanel>
+                    </Border>
+                    <Grid Grid.Column="1"
+                          ColumnDefinitions="* *"
+                          Margin="10 5"
+                          VerticalAlignment="Center">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="⟳" Classes="caption" FontSize="16" Margin="0 -6 0 0"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="Синхронизация: 2 мин. назад" Classes="caption" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" HorizontalAlignment="Right">
+
+
+                            <TextBlock Text="{x:Static utils:AppInfo.Version}" Classes="caption"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="⫶☰" Classes="caption" FontSize="20" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

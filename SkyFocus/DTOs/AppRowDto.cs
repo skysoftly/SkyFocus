@@ -1,0 +1,15 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace SkyFocus.DTOs;
+
+public sealed partial class AppRowDto : ObservableObject
+{
+    [ObservableProperty] private string _name = string.Empty;
+    
+    [ObservableProperty] private string _path = string.Empty;
+    
+    
+    [ObservableProperty] private bool _isFavorite;
+    [ObservableProperty] private bool _isRunning;
+    
+}

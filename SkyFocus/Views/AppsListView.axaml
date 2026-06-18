@@ -1,0 +1,48 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:SkyFocus.Controls"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkyFocus.Views.AppsListView"
+             x:DataType="vm:AppsListViewModel">
+    
+    <Design.DataContext>
+        <vm:AppsListViewModel />
+    </Design.DataContext>
+    
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/MainStyles.axaml" />
+    </UserControl.Styles>
+    
+    
+    <ListBox x:Name="AppsListBox" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp}" Margin="5">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="15, Auto, *, Auto, Auto" MinHeight="50">
+                    <Border Grid.Column="0" Width="5" Classes="selection-indicator" HorizontalAlignment="Left" Margin="-1" />
+                
+                    <!-- <Image Grid.Column="1" Source="{Binding Icon}" Classes="app-icon" /> -->
+                
+                    <StackPanel Grid.Column="2" Classes="app-info">
+                        <TextBlock Classes="app-name" Text="{Binding Name}" />
+                        <TextBlock Classes="app-path" Text="{Binding Path}" />
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="3" Classes="status-panel">
+                        <!-- <TextBlock Classes="runtime" Text="{Binding TodaySeconds, Converter={StaticResource TimeConverter}}" /> -->
+                        <controls:StateTextBlock Classes="app-state" ActiveText="● Запущено" InactiveText="○ Не запущено" IsChecked="{Binding IsRunning}" />
+                    </StackPanel>
+                    
+                    <Grid Grid.Column="4" Margin="5">
+                        <ToggleButton IsChecked="{Binding IsFavorite}"
+                                      Command="{Binding DataContext.ToggleFavoriteCommand, ElementName=AppsListBox}"
+                                      CommandParameter="{Binding}"
+                                      Classes="favorite-toggle" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

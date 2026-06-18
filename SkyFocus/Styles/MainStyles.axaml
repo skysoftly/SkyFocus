@@ -1,0 +1,316 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:SkyFocus.Controls">
+    <Design.PreviewWith>
+           
+            <Grid Width="1920" Height="1080">
+                <Image Source="/Assets/bg.jpg" Stretch="UniformToFill"/>
+                <Border Classes="Overlay">
+                    <Grid Margin="10"
+                          ColumnDefinitions="* *"
+                          RowDefinitions="* *" >
+                        <Border Classes="Tile" >
+                        
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+    </Design.PreviewWith>
+
+    <!-- Add Styles Here -->
+    
+    
+    <Style Selector="Border.Overlay">
+        <Setter Property="Background" Value="#60000000" />
+    </Style>
+    
+    <Style Selector="Border.Tile">
+        <Setter Property="Background" Value="#a0000000" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="BorderBrush" Value="#3c1a42" />
+        <Setter Property="BorderThickness" Value="1.5" />
+    </Style>
+
+    <Style Selector="GridSplitter.TileSplitter">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="8" />
+        <Setter Property="MinHeight" Value="8" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="GridSplitter.VerticalTileSplitter">
+        <Setter Property="Cursor" Value="SizeWestEast" />
+        <Setter Property="Margin" Value="-8,0,8,0" />
+    </Style>
+
+    <Style Selector="GridSplitter.HorizontalTileSplitter">
+        <Setter Property="Cursor" Value="SizeNorthSouth" />
+        <Setter Property="Margin" Value="0,-8,0,8" />
+    </Style>
+    
+    <!-- Текст блоки -->
+
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="40"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="LetterSpacing" Value="1"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#E8E8E8"/>
+    </Style>
+
+    <Style Selector="TextBlock.h4">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="#DDDDDD"/>
+    </Style>
+
+    <Style Selector="TextBlock.p">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="#CCCCCC"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style Selector="TextBlock.bold">
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style Selector="TextBlock.muted">
+        <Setter Property="Foreground" Value="#88FFFFFF"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style Selector="TextBlock.code">
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#22FFFFFF"/>
+        <Setter Property="Foreground" Value="#E0E0E0"/>
+        <Setter Property="Padding" Value="6,3"/>
+    </Style>
+
+    <Style Selector="TextBlock.small">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#CCCCCC"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style Selector="TextBlock.small-muted">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Foreground" Value="#88FFFFFF"/>
+    </Style>
+
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Foreground" Value="#66FFFFFF"/>
+    </Style>
+    
+    
+    <!-- PRIMARY BUTTON (главная фиолетовая кнопка) -->
+    <Style Selector="Button.btn-primary">
+        <Setter Property="Background" Value="#FF6B3596"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="14,4"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        
+        <Style Selector="^:pointerover /template/ContentPresenter">
+            <Setter Property="Background" Value="#9252c7"/>
+        </Style>
+        <Style Selector="^:pressed /template/ContentPresenter">
+            <Setter Property="Background" Value="#592880"/>
+        </Style>
+    </Style>
+    
+    <!-- SECONDARY BUTTON (тёмная стеклянная) -->
+    <Style Selector="Button.btn-secondary">
+        <Setter Property="Background" Value="#22FFFFFF"/>
+        <Setter Property="Foreground" Value="#EAEAEA"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="14,4"/>
+        <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style Selector="Button.btn-secondary:pointerover">
+        <Setter Property="Background" Value="#33FFFFFF"/>
+    </Style>
+
+    <!-- GHOST BUTTON (почти невидимая, но кликабельная) -->
+    <Style Selector="Button.btn-ghost">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#DDDDDD"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="10,3"/>
+    </Style>
+
+    <Style Selector="Button.btn-ghost:pointerover">
+        <Setter Property="Background" Value="#15FFFFFF"/>
+    </Style>
+    
+    
+    
+    <!-- ListBox -->
+    
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+
+        <Style Selector="^ ListBoxItem">
+            <Setter Property="Padding" Value="0,0" />
+            <Setter Property="Margin" Value="0, 2, 8, 2" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="BorderThickness" Value="1" />
+
+            <Style Selector="^ Grid Border.selection-indicator">
+                <Setter Property="IsVisible" Value="False" />
+                <Setter Property="Background" Value="#9959d9" />
+                <Setter Property="CornerRadius" Value="12 0 0 12" />
+            </Style>
+            
+            <Style Selector="^:pointerover">
+                <Style Selector="^ /template/ContentPresenter">
+                    <Setter Property="Background" Value="#20a17dc5" />
+                </Style>
+            </Style>
+
+            <Style Selector="^:selected">
+                <Setter Property="BorderBrush" Value="#3b2353" />
+                <Style Selector="^ /template/ContentPresenter">
+                    <Setter Property="Background" Value="#7052346f" />
+                </Style>
+                <Style Selector="^ Grid Border.selection-indicator">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+            </Style>
+        </Style>
+    </Style>
+
+    <!-- Стили ScrollBar -->
+    <Style Selector="ScrollBar">
+        <Setter Property="AllowAutoHide" Value="False" />
+        <Setter Property="MinWidth" Value="4" />
+        <Setter Property="Width" Value="4" />
+
+        <Style Selector="^ Thumb">
+            <Setter Property="CornerRadius" Value="10" />
+            <Style Selector="^ Border">
+                <Setter Property="Width" Value="4" />
+            </Style>
+        </Style>
+
+        <Style Selector="^ Rectangle">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^ RepeatButton">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </Style>
+    
+    <!-- Стили для элементов приложения -->
+    <Style Selector="Image.app-icon">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="30" />
+    </Style>
+
+    <Style Selector="StackPanel.app-info">
+        <Setter Property="Margin" Value="15, 10" />
+        <Setter Property="Spacing" Value="5" />
+    </Style>
+
+    <Style Selector="TextBlock.app-name">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <Style Selector="TextBlock.app-path">
+        <Setter Property="Foreground" Value="Gray" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <Style Selector="StackPanel.status-panel">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Spacing" Value="5" />
+    </Style>
+
+    <!-- Стили для StatusTextBlock -->
+    <Style Selector="controls|StateTextBlock.app-state">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Foreground" Value="#9E9E9E" />
+        
+        <Style Selector="^:checked">
+            <Setter Property="Foreground" Value="#4CAF50" />
+        </Style>
+    </Style>
+
+    
+    <!-- StateTextBlock caption -->
+    <Style Selector="controls|StateTextBlock.caption">
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Foreground" Value="#66FFFFFF"/>
+    </Style>
+    
+    <Style Selector="controls|StateTextBlock.caption_color">
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Foreground" Value="#66FFFFFF"/>
+        <Style Selector="^:checked">
+            <Setter Property="Foreground" Value="LimeGreen"/>
+        </Style>
+    </Style>
+
+    <!-- Стили для ToggleButton (избранное) -->
+    <Style Selector="ToggleButton.favorite-toggle">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        
+        
+        <Style Selector="^:pointerover /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="^:checked /template/ContentPresenter">
+            <Setter Property="Content" Value="★" />
+            <Setter Property="Foreground" Value="Gold" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="^:unchecked /template/ContentPresenter">
+            <Setter Property="Content" Value="☆" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </Style>
+
+
+    <!-- Время работы -->
+    <Style Selector="TextBlock.runtime">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    
+    
+    <!-- Кнопка переключения приложения -->
+    
+    <Style Selector="Button.app-toggle-button">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        
+        <Style Selector="^ controls|StateTextBlock">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Style>
+</Styles>
