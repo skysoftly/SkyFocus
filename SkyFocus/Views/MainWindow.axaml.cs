@@ -15,21 +15,4 @@ public partial class MainWindow : Window
     {
         BeginMoveDrag(e);
     }
-    
-    private void Minimize(object? sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-
-    private void MaxRestore(object? sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState == WindowState.Maximized
-            ? WindowState.Normal
-            : WindowState.Maximized;
-    }
-
-    private void CloseWindow(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
 }

@@ -49,11 +49,19 @@ public partial class AppInfoViewModel : ViewModelBase
             }
             else
             {
-                Process.Start(new ProcessStartInfo
+                try
                 {
-                    FileName = SelectedApp.Path,
-                    UseShellExecute = true
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = SelectedApp.Path,
+                        UseShellExecute = true,
+                        Verb = "open"
+                    });
+                }
+                catch
+                {
+                    // не получилось открыть
+                }
             }
         }
         finally

@@ -6,6 +6,7 @@ namespace SkyFocus.DTOs;
 
 public sealed partial class AppRowDto : ObservableObject
 {
+    [ObservableProperty] private int _id;
     [ObservableProperty] private Bitmap? _icon;
     [ObservableProperty] private string _name = string.Empty;
     

@@ -13,7 +13,9 @@ namespace SkyFocus.ViewModels;
 
 public partial class AppsListViewModel : ViewModelBase
 {
-    public ObservableCollection<AppRowDto> Apps { get; set; }
+    private AppDbService AppDbService { get; }
+
+    public ObservableCollection<AppRowDto> Apps { get; set; } = new();
     
 
     [ObservableProperty] private AppRowDto? _selectedApp;
@@ -24,54 +26,38 @@ public partial class AppsListViewModel : ViewModelBase
         SelectedAppChanged?.Invoke(value);
     }
 
-    public AppsListViewModel(TrackingService trackingService)
+    public AppsListViewModel(TrackingService trackingService, AppDbService appDbService)
     {
-        Apps = new ObservableCollection<AppRowDto>()
-        {
-            new()
-            {
-                Name = "prismlauncher",
-                Path = "C:\\Users\\skyso\\AppData\\Local\\Programs\\PrismLauncher\\prismlauncher.exe",
-                ProcessName = "prismlauncher",
-                IsFavorite = true,
-            },
-            new()
-            {
-                Name = "opera",
-                Path = "C:\\Users\\skyso\\AppData\\Local\\Programs\\Opera GX\\opera.exe",
-                ProcessName = "opera",
-                IsRunning= true,
-            },
-            new()
-            {
-                Name = "Aseprite",
-                Path = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Aseprite\\Aseprite.exe",
-                ProcessName = "Aseprite",
-            }
-        };
-        foreach (var app in Apps)
-        {
-            _ = LoadIconAsync(app);
-        }
+        AppDbService = appDbService;
+        
+        _ = LoadAppsAsync();
         
         trackingService.RunningAppsChanged += OnRunningAppsChanged;
         trackingService.ActiveAppChanged += OnActiveAppChanged;
     }
-    
-    
-    private async Task LoadIconAsync(AppRowDto app)
+
+    private async Task LoadAppsAsync()
     {
-        var icon = await IconService.GetIconAsync(app.Path);
+        var list = await AppDbService.LoadAppsAsync();
 
-        if (icon != null)
+        Apps = new ObservableCollection<AppRowDto>(list);
+        
+        
+        var tasks = Apps.Select(async app =>
         {
-            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-            {
-                app.Icon = icon;
-            });
-        }
-    }
+            var icon = await IconService.GetIconAsync(app.Path);
 
+            if (icon != null)
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    app.Icon = icon;
+                });
+            }
+        });
+
+        await Task.WhenAll(tasks);
+    }
 
     
     private void OnRunningAppsChanged(HashSet<string> running)
@@ -104,6 +90,7 @@ public partial class AppsListViewModel : ViewModelBase
     private async Task ToggleFavorite(AppRowDto app)
     {
         ResortApps();
+        await AppDbService.UpdateAppAsync(app);
     }
     
     

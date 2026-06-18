@@ -25,6 +25,8 @@ public partial class App : Application
         var services = new ServiceCollection();
         
         services.AddSingleton<TrackingService>();
+        services.AddSingleton<AppDbService>();
+
         
         services.AddSingleton<AppsListViewModel>();
         services.AddSingleton<AppInfoViewModel>();

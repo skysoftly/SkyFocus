@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SkyFocus.Services;
+namespace SkyFocus.Data;
 
 public static class DbPath
 {

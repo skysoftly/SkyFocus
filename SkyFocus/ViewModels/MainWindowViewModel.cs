@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkyFocus.DTOs;
 using SkyFocus.Services;
@@ -13,13 +16,18 @@ public partial class MainWindowViewModel : ViewModelBase
     public AppsListViewModel AppsList { get; }
     public AppInfoViewModel AppInfo { get; }
 
-    public TrackingService Tracking { get; }
+    public TrackingService TrackingService { get; }
+    public AppDbService AppDbService { get; }
 
-    public MainWindowViewModel(AppsListViewModel appsList, AppInfoViewModel appInfo, TrackingService tracking)
+    [ObservableProperty] private bool _isMaximized; 
+
+    public MainWindowViewModel(AppsListViewModel appsList, AppInfoViewModel appInfo, TrackingService tracking, AppDbService appDbService)
     {
-        Tracking = tracking;
         AppsList = appsList;
         AppInfo = appInfo;
+        
+        TrackingService = tracking;
+        AppDbService = appDbService;
     }
     
     
@@ -53,11 +61,39 @@ public partial class MainWindowViewModel : ViewModelBase
             ProcessName = Path.GetFileNameWithoutExtension(filePath),
         };
         
+        await AppDbService.AddAsync(app);
+        
         AppsList.Apps.Add(app);
+        AppsList.ResortApps();
 
         var icon = await IconService.GetIconAsync(filePath);
 
         if (icon != null)
             app.Icon = icon;
+
     }
+
+    [RelayCommand]
+    private void CloseWindow()
+    {
+        App.MainWindow?.Close();
+    }
+    
+    
+    [RelayCommand]
+    private void MinimizeWindow()
+    {
+        App.MainWindow?.WindowState = WindowState.Minimized;
+    }
+    
+    [RelayCommand]
+    private void MaxRestoreWindow()
+    {
+        App.MainWindow?.WindowState = App.MainWindow.WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
+
+        IsMaximized = App.MainWindow?.WindowState == WindowState.Maximized;
+    }
+    
 }

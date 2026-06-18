@@ -41,9 +41,14 @@
                                 Orientation="Horizontal"
                                 Spacing="5">
 
-                        <Button Content="─" Click="Minimize"/>
-                        <Button Content="□" Click="MaxRestore"/>
-                        <Button Content="✕" Click="CloseWindow"/>
+                        <Button Content="─" Command="{Binding MinimizeWindowCommand}"/>
+                        <Button Command="{Binding MaxRestoreWindowCommand}">
+                            <Grid>
+                                <Image Source="/Assets/Icons/square.png" IsVisible="{Binding !IsMaximized}"/>
+                                <Image Source="/Assets/Icons/double_square.png" IsVisible="{Binding IsMaximized}"/>
+                            </Grid>
+                        </Button>
+                        <Button Content="✕" Command="{Binding CloseWindowCommand}"/>
 
                     </StackPanel>
                 </Grid>
@@ -125,9 +130,9 @@
                       ColumnSpacing="10">
                     <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center" Width="170">
                         <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color"  IsChecked="{Binding Tracking.IsRunning}" />
+                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color"  IsChecked="{Binding TrackingService.IsRunning}" />
                             <controls:StateTextBlock ActiveText="Отслеживание активно"
-                                                     InactiveText="Отслеживание не активно" Classes="caption" IsChecked="{Binding Tracking.IsRunning}" />
+                                                     InactiveText="Отслеживание не активно" Classes="caption" IsChecked="{Binding TrackingService.IsRunning}" />
                         </StackPanel>
                     </Border>
                     <Grid Grid.Column="1"

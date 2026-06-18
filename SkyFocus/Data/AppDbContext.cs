@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SkyFocus.Data.Entities;
-using SkyFocus.Services;
 
 namespace SkyFocus.Data;
 
