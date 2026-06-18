@@ -54,7 +54,8 @@
                     <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal"
                                 Spacing="5">
                         <Button Classes="btn-primary" Width="120" Height="35"
-                                HorizontalContentAlignment="Center">
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding AddApp}">
                             <StackPanel Orientation="Horizontal"
                                         Spacing="10"
                                         Height="14">
@@ -122,11 +123,11 @@
                       VerticalAlignment="Center" Margin="5"
                       ColumnDefinitions="Auto *"
                       ColumnSpacing="10">
-                    <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color" />
+                    <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center" Width="170">
+                        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color"  IsChecked="{Binding Tracking.IsRunning}" />
                             <controls:StateTextBlock ActiveText="Отслеживание активно"
-                                                     InactiveText="Отслеживание неактивно" Classes="caption" />
+                                                     InactiveText="Отслеживание не активно" Classes="caption" IsChecked="{Binding Tracking.IsRunning}" />
                         </StackPanel>
                     </Border>
                     <Grid Grid.Column="1"

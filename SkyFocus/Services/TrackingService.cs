@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkyFocus.Services;
 
-public class TrackingService
+public partial class TrackingService : ObservableObject
 {
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
@@ -19,10 +21,16 @@ public class TrackingService
     
     public event Action<HashSet<string>>? RunningAppsChanged;
     public event Action<string>? ActiveAppChanged;
+    
+    
+    [ObservableProperty]
+    private bool _isRunning;
+    public event Action? Changed;
 
     public async Task StartAsync()
     {
         _cts = new CancellationTokenSource();
+        IsRunning = true;
         while (!_cts.Token.IsCancellationRequested)
         {
             CheckRunningApps();
@@ -35,6 +43,7 @@ public class TrackingService
     public void Stop()
     {
         _cts?.Cancel();
+        IsRunning = false;
     }
     
     private void CheckFocusedWindow()

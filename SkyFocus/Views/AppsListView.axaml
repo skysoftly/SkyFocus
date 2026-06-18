@@ -23,7 +23,7 @@
                 <Grid ColumnDefinitions="15, Auto, *, Auto, Auto" MinHeight="50">
                     <Border Grid.Column="0" Width="5" Classes="selection-indicator" HorizontalAlignment="Left" Margin="-1" />
                 
-                    <!-- <Image Grid.Column="1" Source="{Binding Icon}" Classes="app-icon" /> -->
+                    <Image Grid.Column="1" Source="{Binding Icon}" Classes="app-icon" />
                 
                     <StackPanel Grid.Column="2" Classes="app-info">
                         <TextBlock Classes="app-name" Text="{Binding Name}" />

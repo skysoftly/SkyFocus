@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkyFocus.DTOs;
@@ -48,28 +49,53 @@ public partial class AppsListViewModel : ViewModelBase
                 ProcessName = "Aseprite",
             }
         };
-        
+        foreach (var app in Apps)
+        {
+            _ = LoadIconAsync(app);
+        }
         
         trackingService.RunningAppsChanged += OnRunningAppsChanged;
         trackingService.ActiveAppChanged += OnActiveAppChanged;
     }
     
+    
+    private async Task LoadIconAsync(AppRowDto app)
+    {
+        var icon = await IconService.GetIconAsync(app.Path);
+
+        if (icon != null)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                app.Icon = icon;
+            });
+        }
+    }
+
+
+    
     private void OnRunningAppsChanged(HashSet<string> running)
     {
-        foreach (var app in Apps)
+        Dispatcher.UIThread.Post(() =>
         {
-            app.IsRunning = running.Contains(app.ProcessName);
-        }
+            foreach (var app in Apps)
+            {
+                app.IsRunning = running.Contains(app.ProcessName);
+            }
+        });
 
         ResortApps();
     }
     
     private void OnActiveAppChanged(string processName)
     {
-        foreach (var app in Apps)
+        Dispatcher.UIThread.Post(() =>
         {
-            app.IsActive = app.ProcessName == processName;
-        }
+            foreach (var app in Apps)
+            {
+                app.IsActive = app.ProcessName == processName;
+            }
+        });
     }
     
     

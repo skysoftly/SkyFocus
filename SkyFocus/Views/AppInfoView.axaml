@@ -16,13 +16,13 @@
         <StyleInclude Source="/Styles/MainStyles.axaml" />
     </UserControl.Styles>
     
-    <Grid ColumnDefinitions="* *" RowDefinitions="Auto *" Margin="5">
-          <!-- IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}"> -->
+    <Grid ColumnDefinitions="* *" RowDefinitions="Auto *" Margin="5"
+          IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}">
         <StackPanel Orientation="Vertical" Margin="20" Spacing="30">
             <StackPanel Orientation="Horizontal" Spacing="30" Margin="10">
-                <!-- <Image Source="{Binding App?.Icon}" Height="40" Width="40" /> -->
+                <Image Source="{Binding SelectedApp?.Icon}" Height="40" Width="40" />
                 <StackPanel>
-                    <TextBlock Text="{Binding SelectedApp?.Name}" FontSize="20" />
+                    <TextBlock Text="{Binding  SelectedApp?.Name}" FontSize="20" />
                 </StackPanel>
             </StackPanel>
             <Grid ColumnDefinitions="* 50" ColumnSpacing="10">

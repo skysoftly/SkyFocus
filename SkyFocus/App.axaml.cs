@@ -13,6 +13,8 @@ namespace SkyFocus;
 
 public partial class App : Application
 {
+    public static MainWindow? MainWindow { get; private set; }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -35,10 +37,9 @@ public partial class App : Application
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = provider.GetRequiredService<MainWindowViewModel>(),
-            };
+            MainWindow = new MainWindow();
+            MainWindow.DataContext = provider.GetRequiredService<MainWindowViewModel>();
+            desktop.MainWindow = MainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();
