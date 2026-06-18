@@ -57,17 +57,19 @@
                       ColumnDefinitions="50 *">
                     
                     <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal"
-                                Spacing="5">
-                        <Button Classes="btn-primary" Width="120" Height="35"
+                                Spacing="10">
+                        <Button Classes="primary" Width="120" Height="35"
                                 HorizontalContentAlignment="Center"
                                 Command="{Binding AddApp}">
                             <StackPanel Orientation="Horizontal"
-                                        Spacing="10"
-                                        Height="14">
+                                        Spacing="5"
+                                        Height="14"
+                                        Margin="0 0 10 0">
                                 <Image Source="/Assets/Icons/plus.png" />
-                                <TextBlock Text="Добавить" VerticalAlignment="Center" />
+                                <TextBlock Text="Добавить" VerticalAlignment="Center" Classes="h5"/>
                             </StackPanel>
                         </Button>
+                        <TextBox PlaceholderText="🔍︎ Поиск приложений..." Width="240" Classes="h5"></TextBox>
                     </StackPanel>
 
                     <Grid Grid.Column="1" Grid.Row="1">
