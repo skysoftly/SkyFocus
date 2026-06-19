@@ -4,7 +4,9 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SkyFocus.Data;
 using SkyFocus.Services;
 using SkyFocus.ViewModels;
 using SkyFocus.Views;
@@ -22,6 +24,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var dbContext = new AppDbContext();
+        dbContext.Database.Migrate();
+        
         var services = new ServiceCollection();
         
         services.AddSingleton<TrackingService>();
