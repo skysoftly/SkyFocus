@@ -21,6 +21,8 @@ public class AppDbContext : DbContext
             
             entity.Property(a => a.Name).IsRequired();
             entity.Property(a => a.Path).IsRequired();
+            entity.HasIndex(a => a.Path).IsUnique();
+            
             entity.Property(a => a.ProcessName).IsRequired();
             
         });
