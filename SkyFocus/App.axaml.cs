@@ -42,6 +42,7 @@ public partial class App : Application
         services.AddSingleton<AppsListViewModel>();
         services.AddSingleton<AppInfoViewModel>();
         services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<ChartViewModel>();
         
         var provider = services.BuildServiceProvider();
         

@@ -6,6 +6,7 @@ namespace SkyFocus.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<AppEntity> Apps => Set<AppEntity>();
+    public DbSet<DailyAppStatEntity> DailyStats => Set<DailyAppStatEntity>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite($"Data Source={DbPath.GetPath()}"); 
@@ -24,6 +25,37 @@ public class AppDbContext : DbContext
             
             entity.Property(a => a.ProcessName).IsRequired();
             
+            entity.HasIndex(a => a.IsFavorite);
+
+            
+            entity.HasMany(a => a.DailyStats)
+                .WithOne(d => d.App)
+                .HasForeignKey(d => d.AppId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        
+        modelBuilder.Entity<DailyAppStatEntity>(entity =>
+        {
+            entity.ToTable("DailyAppStat");
+            entity.HasKey(d => d.Id);
+            
+            entity.Property(d => d.AppId)
+                .IsRequired();
+                
+            entity.Property(d => d.Date)
+                .IsRequired();
+
+            entity.Property(d => d.UsageTimeSeconds)
+                .IsRequired();
+
+            entity.HasIndex(d => new { d.AppId, d.Date })
+                .IsUnique();
+            
+            entity.HasOne(d => d.App)
+                .WithMany(a => a.DailyStats)
+                .HasForeignKey(d => d.AppId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

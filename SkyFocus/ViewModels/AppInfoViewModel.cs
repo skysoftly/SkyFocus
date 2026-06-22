@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -14,25 +15,65 @@ namespace SkyFocus.ViewModels;
 
 public partial class AppInfoViewModel : ViewModelBase
 {
-    [ObservableProperty] private AppRowDto? _selectedApp;
+    [ObservableProperty] private int _secondWeek; 
+    [ObservableProperty] private int _secondMonth; 
+    
+    
+    [ObservableProperty] private AppRowDto? _selectedApp; 
+    public ChartViewModel Chart {get;}
 
     public AppsListViewModel AppsListViewModel { get; }
+    private AppDbService _appDbService;
     private readonly IConfirmService _confirm;
 
-    public AppInfoViewModel(AppsListViewModel appsList, IConfirmService confirm)
+    public AppInfoViewModel(AppsListViewModel appsList, AppDbService appDbService, ChartViewModel chartViewModel, IConfirmService confirm)
     {
         AppsListViewModel = appsList;
+        _appDbService = appDbService;
+        Chart = chartViewModel;
         _confirm = confirm;
-        appsList.SelectedAppChanged += selectedApp => { SelectedApp = selectedApp; };
+        appsList.SelectedAppChanged += SelectedAppChanged;
     }
 
+    private async void SelectedAppChanged(AppRowDto? selectedApp)
+    {
+        if (SelectedApp == selectedApp) return;
+        SelectedApp = selectedApp;
+
+        if (SelectedApp != null)
+        {
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-7);
+            var startOfMonth = today.AddDays(-30);
+        
+            // Получаем за неделю
+            var weekData = await _appDbService.GetStatsForAppByDatesAsync(
+                SelectedApp.Id, 
+                startOfWeek, 
+                today
+            );
+            SecondWeek = weekData.Sum(x => x.UsageTimeSeconds);
+        
+            // Получаем за месяц
+            var monthData = await _appDbService.GetStatsForAppByDatesAsync(
+                SelectedApp.Id, 
+                startOfMonth, 
+                today
+            );
+            SecondMonth = monthData.Sum(x => x.UsageTimeSeconds);
+            
+            _ = Chart.UpdateChart(SelectedApp.Id);
+        }
+    }
+    
+    
     public AppInfoViewModel()
     {
         SelectedApp = new AppRowDto
         {
             Name = "opera",
             Path = @"C:\Users\skyso\AppData\Local\Programs\Opera GX\opera.exe",
-            ProcessName = "chrome",
+            ProcessName = "opera",
             IsFavorite = true,
             IsRunning = true,
             IsActive = false,
@@ -53,7 +94,17 @@ public partial class AppInfoViewModel : ViewModelBase
             {
                 try
                 {
-                    p.Kill();
+                    if (p.CloseMainWindow())
+                    {
+                        if (!p.WaitForExit(10000))
+                        {
+                            p.Kill();
+                        }
+                    }
+                    else
+                    {
+                        p.Kill();
+                    }
                 }
                 catch
                 {
@@ -78,9 +129,9 @@ public partial class AppInfoViewModel : ViewModelBase
         }
     }
 
-
+    
     [RelayCommand]
-    private async Task ToggleFavoriteCommand()
+    private async Task ToggleFavorite()
     {
         if (SelectedApp == null) return;
         await AppsListViewModel.ToggleFavorite(SelectedApp);

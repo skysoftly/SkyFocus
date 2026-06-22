@@ -113,6 +113,12 @@
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="LightGray" />
     </Style>
+    
+    <Style Selector="SelectableTextBlock.caption-white">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="LightGray" />
+    </Style>
+
 
     
     <Style Selector="Button.copy">

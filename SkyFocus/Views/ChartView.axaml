@@ -1,0 +1,31 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkyFocus.Views.ChartView"
+             x:DataType="vm:ChartViewModel"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
+    
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/MainStyles.axaml" />
+        <StyleInclude Source="/Styles/ChartStyles.axaml" />
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto *">
+        <Grid ColumnDefinitions="* *" Margin="10">
+            <TextBlock Grid.Column="0"  Text="Статистика пользования" Classes="h4"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding Periods}"
+                      SelectedItem="{Binding SelectedPeriod}"
+                      DisplayMemberBinding="{Binding DisplayName}"
+                      Padding="10,6"
+                      CornerRadius="6"/>
+        </Grid>
+        <lvc:CartesianChart Grid.Row="1" Series="{Binding Series}">
+            <lvc:CartesianChart.XAxes>
+                <lvc:XamlAxis Labels="{Binding Labels}" LabelsRotation="0"/>
+            </lvc:CartesianChart.XAxes>
+        </lvc:CartesianChart>
+    </Grid>
+</UserControl>

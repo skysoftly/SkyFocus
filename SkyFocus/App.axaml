@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SkyFocus.App"
              xmlns:local="using:SkyFocus"
-             xmlns:converters="using:SkyFocus.Converter"
+             xmlns:converters="using:SkyFocus.Converters"
              RequestedThemeVariant="Dark">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -17,6 +17,6 @@
     </Application.Styles>
 
     <Application.Resources>
-        <converters:PathToFolderConverter x:Key="PathToFolder" />
+        <converters:SecondsToTimeStringConverter x:Key="SecondsToTimeString" />
     </Application.Resources>
 </Application>

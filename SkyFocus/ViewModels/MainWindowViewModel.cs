@@ -38,53 +38,11 @@ public partial class MainWindowViewModel : ViewModelBase
         TrackingService = new TrackingService();
         AppsList = new AppsListViewModel(TrackingService, AppDbService);
         Overlay = new OverlayViewModel();
-        AppInfo = new AppInfoViewModel(AppsList, Overlay);
+        var chartViewModel = new  ChartViewModel(AppDbService); 
+        AppInfo = new AppInfoViewModel(AppsList, AppDbService, chartViewModel, Overlay);
     }
     
     
-    [RelayCommand]
-    public async Task AddApp()
-    {
-        if (App.MainWindow != null)
-        {
-            var files = await App.MainWindow.StorageProvider.OpenFilePickerAsync(
-                new FilePickerOpenOptions
-                {
-                    Title = "Выберите приложение",
-                    AllowMultiple = false,
-                    FileTypeFilter = new[]
-                    {
-                        new FilePickerFileType("Исполняемые файлы")
-                        {
-                            Patterns = new[] { "*.exe", "*.url" }
-                        }
-                    }
-                });
-
-            if (files.Count == 0)
-                return;
-
-            var filePath = files[0].Path.LocalPath;
-        
-        
-            var app = new AppRowDto
-            {
-                Name = Path.GetFileNameWithoutExtension(filePath),
-                Path = filePath,
-                ProcessName = Path.GetFileNameWithoutExtension(filePath),
-            };
-        
-            await AppDbService.AddAsync(app);
-        
-            AppsList.Apps.Add(app);
-            AppsList.ResortApps();
-
-            var icon = IconService.GetIcon(filePath);
-
-            if (icon != null)
-                app.Icon = icon;
-        }
-    }
 
     [RelayCommand]
     private void CloseWindow()

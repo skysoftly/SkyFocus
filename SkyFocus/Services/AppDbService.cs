@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -10,20 +11,6 @@ namespace SkyFocus.Services;
 
 public class AppDbService
 {
-    public async Task<List<AppRowDto>> LoadAppsAsync()
-    {
-        using var db = new AppDbContext();
-
-        return await db.Apps.Select(x => new AppRowDto
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Path = x.Path,
-            ProcessName = x.ProcessName,
-            IsFavorite = x.IsFavorite
-        }).ToListAsync();
-    }
-    
     public async Task AddAsync(AppRowDto dto)
     {
         using var db = new AppDbContext();
@@ -51,6 +38,7 @@ public class AppDbService
         
         entity.Name = dto.Name;
         entity.Path = dto.Path;
+        entity.LaunchCount = dto.LaunchCount;
         entity.ProcessName = dto.ProcessName;
         entity.IsFavorite = dto.IsFavorite;
         
@@ -65,5 +53,71 @@ public class AppDbService
         await db.Apps.Where(x => x.Id == id).ExecuteDeleteAsync();
 
         await db.SaveChangesAsync();
+    }
+    
+    
+    public async Task AddUsageTimeAsync(int appId, int secondsToAdd)
+    {
+        using var db = new AppDbContext();
+        var today = DateTime.Today;
+        
+        var stat = await db.DailyStats.FirstOrDefaultAsync(s => s.AppId == appId && s.Date == today);
+
+        if (stat == null)
+        {
+            stat = new DailyAppStatEntity
+            {
+                AppId = appId,
+                Date = today,
+                UsageTimeSeconds = secondsToAdd
+            };
+            db.DailyStats.Add(stat);
+        }
+        else
+        {
+            stat.UsageTimeSeconds += secondsToAdd;
+        }
+        
+        await db.SaveChangesAsync();
+    }
+    
+    
+    public async Task<List<AppRowDto>> LoadAppsWithTodayStatsAsync()
+    {
+        using var db = new AppDbContext();
+        var today = DateTime.Today;
+        
+        var apps = await db.Apps
+            .Select(a => new AppRowDto
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path,
+                ProcessName = a.ProcessName,
+                LaunchCount = a.LaunchCount,
+                IsFavorite = a.IsFavorite,
+                UsageTimeSeconds = a.DailyStats
+                    .Where(s => s.Date == today)
+                    .Sum(s => s.UsageTimeSeconds)
+            })
+            .OrderByDescending(a => a.UsageTimeSeconds)
+            .ToListAsync();
+        
+        return apps;
+    }
+
+    public async Task<List<AppStatsDto>> GetStatsForAppByDatesAsync(int appId, DateTime startDate, DateTime endDate)
+    {
+        return await new AppDbContext().DailyStats
+            .Where(s => s.AppId == appId && s.Date >= startDate && s.Date <= endDate)
+            .GroupBy(s => s.Date)
+            .Select(g => new AppStatsDto
+            {
+                AppId = appId,
+                Date = g.Key,
+                UsageTimeSeconds = g.Sum(s => s.UsageTimeSeconds)
+            })
+            .OrderBy(s => s.Date)
+            .ToListAsync();
     }
 }

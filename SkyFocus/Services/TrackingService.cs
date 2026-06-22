@@ -20,12 +20,13 @@ public partial class TrackingService : ObservableObject
     private CancellationTokenSource? _cts;
     
     public event Action<HashSet<string>>? RunningAppsChanged;
-    public event Action<string>? ActiveAppChanged;
+    public event Action<string?, string>? ActiveAppChanged;
+    
+    private string? _lastName;
     
     
     [ObservableProperty]
     private bool _isRunning;
-    public event Action? Changed;
 
     public async Task StartAsync()
     {
@@ -58,16 +59,39 @@ public partial class TrackingService : ObservableObject
         try
         {
             var process = Process.GetProcessById((int)pid);
-            var name = process.ProcessName;
-
-            ActiveAppChanged?.Invoke(name);
+            
+            var name = CleanName(process.ProcessName);
+            
+            if (_lastName != name)
+            {
+                Console.WriteLine(name);
+                ActiveAppChanged?.Invoke(_lastName, name);
+                _lastName = name;
+            }
+            
         }
         catch
         {
             // процесс мог закрыться за долю секунды
         }
     }
+    private string CleanName(string name)
+    {
+        name = name.ToLowerInvariant();
 
+        name = name.Replace("webhelper", "")
+            .Replace("cef", "")
+            .Replace("renderer", "")
+            .Replace("gpu", "")
+            .Replace("crashpad", "")
+            .Replace("utility", "");
+
+        if (string.IsNullOrWhiteSpace(name))
+            return "";
+
+        return name;
+    }
+    
     private void CheckRunningApps()
     {
         var processes = Process.GetProcesses();
