@@ -10,13 +10,20 @@
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
-
-    <Application.Styles>
-        <FluentTheme />
-
-    </Application.Styles>
-
+    
     <Application.Resources>
         <converters:SecondsToTimeStringConverter x:Key="SecondsToTimeString" />
     </Application.Resources>
+    
+    
+    <Application.Styles>
+        <!-- Тема -->
+        <FluentTheme />
+        
+        <!-- ⭐ ВСЕ СТИЛИ ЗДЕСЬ -->
+        <StyleInclude Source="avares://SkyFocus/Styles/MainStyles.axaml" />
+        <StyleInclude Source="avares://SkyFocus/Styles/AppsListStyles.axaml" />
+        <StyleInclude Source="avares://SkyFocus/Styles/ChartStyles.axaml" />
+        <StyleInclude Source="avares://SkyFocus/Styles/AppsListStyles.axaml" />
+    </Application.Styles>
 </Application>

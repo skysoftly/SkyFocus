@@ -13,32 +13,28 @@
         <vm:OverlayViewModel />
     </Design.DataContext>
 
-    <UserControl.Styles>
-        <StyleInclude Source="/Styles/MainStyles.axaml" />
-    </UserControl.Styles>
-
-    
     <Panel IsVisible="{Binding OverlayVisible}"
            Background="#80000000">
-        
-        <Border Width="320"
-                Padding="20"
-                CornerRadius="12"
-                Background="#2B2B2B"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+        <Grid>
+            <Border Width="320"
+                    Padding="20"
+                    CornerRadius="12"
+                    Background="#2B2B2B"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
 
-            <StackPanel Spacing="10">
+                <StackPanel Spacing="10">
 
-                <TextBlock Text="{Binding OverlayText}" />
+                    <TextBlock Text="{Binding OverlayText}" />
                 
-                <Button Content="Подтвердить"
-                        Command="{Binding ConfirmOverlayCommand}" />
+                    <Button Content="Подтвердить"
+                            Command="{Binding ConfirmOverlayCommand}" />
 
-                <Button Content="Отмена"
-                        Command="{Binding CancelOverlayCommand}" />
+                    <Button Content="Отмена"
+                            Command="{Binding CancelOverlayCommand}" />
 
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Panel>
 </UserControl>

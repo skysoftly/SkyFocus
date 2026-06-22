@@ -12,16 +12,11 @@
         <vm:AppsListViewModel />
     </Design.DataContext>
 
-    <UserControl.Styles>
-        <StyleInclude Source="/Styles/MainStyles.axaml" />
-        <StyleInclude Source="/Styles/AppsListStyles.axaml" />
-    </UserControl.Styles>
-
     <Grid RowDefinitions="65 1 *">
         <Grid Grid.Row="0" VerticalAlignment="Center" ColumnDefinitions="Auto *" ColumnSpacing="15" Margin="10 0">
             <Button Classes="primary" Width="120" Height="35"
                     HorizontalContentAlignment="Center"
-                    Command="{Binding AddApp}">
+                    Command="{Binding AppService.AddAppCommand}">
                 <StackPanel Orientation="Horizontal"
                             Spacing="5"
                             Height="14">
@@ -29,10 +24,14 @@
                     <TextBlock Text="Добавить" VerticalAlignment="Center" Classes="h5" />
                 </StackPanel>
             </Button>
-            <TextBox Grid.Column="1" Margin="5 0" PlaceholderText="🔍︎ Поиск приложений..." Text="{Binding SearchText}" Classes="h5"></TextBox>
+            <TextBox  Grid.Column="1" Margin="5 0" PlaceholderText="🔍︎ Поиск приложений..." Text="{Binding AppService.SearchText, Mode=TwoWay}" Classes="h5"/>
         </Grid>
         <Border Grid.Row="1" Classes="Separator" />
-        <ListBox x:Name="AppsListBox" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp}">
+        <StackPanel Grid.Row="1" Classes="app-info">
+            <TextBlock Classes="app-name" Text="Имя" />
+            <TextBlock Classes="app-path" Text="Путь" />
+        </StackPanel>
+        <ListBox Grid.Row="2" x:Name="AppsListBox" ItemsSource="{Binding AppService.FilteredApps}" SelectedItem="{Binding AppService.SelectedApp}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="15, Auto, *, Auto, Auto" MinHeight="50">
@@ -55,9 +54,9 @@
 
                         <Grid Grid.Column="4" Margin="5">
                             <ToggleButton IsChecked="{Binding IsFavorite}"
-                                          Command="{Binding DataContext.ToggleFavoriteCommand, ElementName=AppsListBox}"
                                           CommandParameter="{Binding}"
                                           Classes="favorite-toggle" />
+                                          <!-- Command="{Binding DataContext.ToggleFavoriteCommand, ElementName=AppsListBox}" -->
                         </Grid>
                     </Grid>
                 </DataTemplate>

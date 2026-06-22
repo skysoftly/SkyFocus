@@ -8,15 +8,6 @@
              x:Class="SkyFocus.Views.AppInfoView"
              x:DataType="vm:AppInfoViewModel">
 
-    <Design.DataContext>
-        <vm:AppInfoViewModel />
-    </Design.DataContext>
-
-    <UserControl.Styles>
-        <StyleInclude Source="/Styles/MainStyles.axaml" />
-        <StyleInclude Source="/Styles/AppInfoStyles.axaml" />
-    </UserControl.Styles>
-
     <Grid Margin="10"
           IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}"
           RowSpacing="10"

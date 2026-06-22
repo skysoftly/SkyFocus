@@ -8,11 +8,6 @@
              x:DataType="vm:ChartViewModel"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
     
-    <UserControl.Styles>
-        <StyleInclude Source="/Styles/MainStyles.axaml" />
-        <StyleInclude Source="/Styles/ChartStyles.axaml" />
-    </UserControl.Styles>
-
     <Grid RowDefinitions="Auto *">
         <Grid ColumnDefinitions="* *" Margin="10">
             <TextBlock Grid.Column="0"  Text="Статистика пользования" Classes="h4"/>

@@ -18,8 +18,7 @@ namespace SkyFocus;
 
 public partial class App : Application
 {
-    private TrayIcon? _tray;
-    public static MainWindow? MainWindow { get; private set; }
+    public static MainWindow MainWindow { get; private set; } = new();
 
     public override void Initialize()
     {
@@ -33,15 +32,17 @@ public partial class App : Application
         
         var services = new ServiceCollection();
         
-        services.AddSingleton<TrackingService>();
         services.AddSingleton<AppDbService>();
+        services.AddSingleton<TrackingService>();
+        services.AddSingleton<AppService>();
         services.AddSingleton<IConfirmService>(sp =>
             sp.GetRequiredService<OverlayViewModel>());
         
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<WindowBarViewModel>();
         services.AddSingleton<OverlayViewModel>();
         services.AddSingleton<AppsListViewModel>();
         services.AddSingleton<AppInfoViewModel>();
-        services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<ChartViewModel>();
         
         var provider = services.BuildServiceProvider();
@@ -51,7 +52,6 @@ public partial class App : Application
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            MainWindow = new MainWindow();
             MainWindow.DataContext = provider.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = MainWindow;
             

@@ -11,60 +11,21 @@ using SkyFocus.Utils;
 
 namespace SkyFocus.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel(
+    AppsListViewModel appsList,
+    AppInfoViewModel appInfo,
+    TrackingService tracking,
+    OverlayViewModel overlay,
+    WindowBarViewModel windowBar)
+    : ViewModelBase
 {
-    public AppsListViewModel AppsList { get; }
-    public AppInfoViewModel AppInfo { get; }
-    public OverlayViewModel Overlay { get; }
+    public WindowBarViewModel WindowBar { get; } = windowBar;
+    public AppsListViewModel AppsList { get; } = appsList;
+    public AppInfoViewModel AppInfo { get; } = appInfo;
+    public OverlayViewModel Overlay { get; } = overlay;
 
-    public TrackingService TrackingService { get; }
-    public AppDbService AppDbService { get; }
-
-    [ObservableProperty] private bool _isMaximized; 
-
-    public MainWindowViewModel(AppsListViewModel appsList, AppInfoViewModel appInfo, TrackingService tracking, AppDbService appDbService, OverlayViewModel overlay)
-    {
-        AppsList = appsList;
-        AppInfo = appInfo;
-        Overlay = overlay;
-        
-        TrackingService = tracking;
-        AppDbService = appDbService;
-    }
-
-    public MainWindowViewModel()
-    {
-        AppDbService = new AppDbService();
-        TrackingService = new TrackingService();
-        AppsList = new AppsListViewModel(TrackingService, AppDbService);
-        Overlay = new OverlayViewModel();
-        var chartViewModel = new  ChartViewModel(AppDbService); 
-        AppInfo = new AppInfoViewModel(AppsList, AppDbService, chartViewModel, Overlay);
-    }
+    public TrackingService TrackingService { get; }= tracking;
     
     
-
-    [RelayCommand]
-    private void CloseWindow()
-    {
-        App.MainWindow?.Close();
-    }
-    
-    
-    [RelayCommand]
-    private void MinimizeWindow()
-    {
-        App.MainWindow?.WindowState = WindowState.Minimized;
-    }
-    
-    [RelayCommand]
-    private void MaxRestoreWindow()
-    {
-        App.MainWindow?.WindowState = App.MainWindow.WindowState == WindowState.Maximized
-            ? WindowState.Normal
-            : WindowState.Maximized;
-
-        IsMaximized = App.MainWindow?.WindowState == WindowState.Maximized;
-    }
     
 }

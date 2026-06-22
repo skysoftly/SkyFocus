@@ -23,7 +23,7 @@ public partial class AppInfoViewModel : ViewModelBase
     public ChartViewModel Chart {get;}
 
     public AppsListViewModel AppsListViewModel { get; }
-    private AppDbService _appDbService;
+    private readonly AppDbService _appDbService;
     private readonly IConfirmService _confirm;
 
     public AppInfoViewModel(AppsListViewModel appsList, AppDbService appDbService, ChartViewModel chartViewModel, IConfirmService confirm)
@@ -32,14 +32,16 @@ public partial class AppInfoViewModel : ViewModelBase
         _appDbService = appDbService;
         Chart = chartViewModel;
         _confirm = confirm;
-        appsList.SelectedAppChanged += SelectedAppChanged;
+        // appsList.SelectedAppChanged += SelectedAppChanged;
     }
 
     private async void SelectedAppChanged(AppRowDto? selectedApp)
     {
-        if (SelectedApp == selectedApp) return;
+        if (SelectedApp == selectedApp || selectedApp == null) return;
+        
         SelectedApp = selectedApp;
 
+        
         if (SelectedApp != null)
         {
             var today = DateTime.Today;
@@ -66,20 +68,6 @@ public partial class AppInfoViewModel : ViewModelBase
         }
     }
     
-    
-    public AppInfoViewModel()
-    {
-        SelectedApp = new AppRowDto
-        {
-            Name = "opera",
-            Path = @"C:\Users\skyso\AppData\Local\Programs\Opera GX\opera.exe",
-            ProcessName = "opera",
-            IsFavorite = true,
-            IsRunning = true,
-            IsActive = false,
-            Icon = IconService.GetIcon(@"C:\Users\skyso\AppData\Local\Programs\Opera GX\opera.exe")
-        };
-    }
 
     [RelayCommand]
     private async Task ToggleApp()
@@ -134,7 +122,7 @@ public partial class AppInfoViewModel : ViewModelBase
     private async Task ToggleFavorite()
     {
         if (SelectedApp == null) return;
-        await AppsListViewModel.ToggleFavorite(SelectedApp);
+        // await AppsListViewModel.ToggleFavorite(SelectedApp);
     }
 
     
@@ -148,7 +136,7 @@ public partial class AppInfoViewModel : ViewModelBase
 
         // удаление
 
-        AppsListViewModel.Delete(SelectedApp!);
+        // AppsListViewModel.Delete(SelectedApp!);
     }
 
 
