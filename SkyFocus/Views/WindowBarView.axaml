@@ -1,0 +1,40 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkyFocus.Views.WindowBarView"
+             x:DataType="vm:WindowBarViewModel">
+    
+    <Grid ColumnDefinitions="50 * Auto"
+          Background="#00000000"
+          PointerPressed="DragWindow">
+        <Image Grid.Column="0" Source="/Assets/icon.png" Width="35" />
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock Text="SkyFocus" Classes="h5"/>
+            <TextBlock Text="Менеджер приложений и учёта времени" Classes="caption"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    Spacing="5"
+                    Margin="5">
+
+            <Button Command="{Binding MinimizeWindowCommand}" Classes="window">
+                <Image Source="/Assets/Icons/minus.png" Width="20"/>
+            </Button>
+            <Button Command="{Binding MaxRestoreWindowCommand}" Classes="window">
+                <Grid>
+                    <Image Source="/Assets/Icons/square.png" IsVisible="{Binding !IsMaximized}" Width="20" />
+                    <Image Source="/Assets/Icons/double_square.png" IsVisible="{Binding IsMaximized}" Width="20" />
+                </Grid>
+            </Button>
+            <Button Command="{Binding CloseWindowCommand}" Classes="window close">
+                <Image Source="/Assets/Icons/cross.png" Width="20"/>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+
+</UserControl>

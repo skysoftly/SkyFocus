@@ -13,58 +13,75 @@ namespace SkyFocus.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public WindowBarViewModel WindowBar { get; }
+
     public AppsListViewModel AppsList { get; }
-    public AppInfoViewModel AppInfo { get; }
+
+    // public AppInfoViewModel AppInfo { get; }
     public OverlayViewModel Overlay { get; }
 
     public TrackingService TrackingService { get; }
-    public AppDbService AppDbService { get; }
 
-    [ObservableProperty] private bool _isMaximized; 
-
-    public MainWindowViewModel(AppsListViewModel appsList, AppInfoViewModel appInfo, TrackingService tracking, AppDbService appDbService, OverlayViewModel overlay)
+    public MainWindowViewModel(
+        WindowBarViewModel windowBar,
+        AppsListViewModel appsList,
+        OverlayViewModel overlay,
+        TrackingService trackingService)
     {
+        WindowBar = windowBar;
         AppsList = appsList;
-        AppInfo = appInfo;
         Overlay = overlay;
-        
-        TrackingService = tracking;
-        AppDbService = appDbService;
+        TrackingService = trackingService;
     }
 
-    public MainWindowViewModel()
-    {
-        AppDbService = new AppDbService();
-        TrackingService = new TrackingService();
-        AppsList = new AppsListViewModel(TrackingService, AppDbService);
-        Overlay = new OverlayViewModel();
-        var chartViewModel = new  ChartViewModel(AppDbService); 
-        AppInfo = new AppInfoViewModel(AppsList, AppDbService, chartViewModel, Overlay);
-    }
-    
-    
 
-    [RelayCommand]
-    private void CloseWindow()
-    {
-        App.MainWindow?.Close();
-    }
-    
-    
-    [RelayCommand]
-    private void MinimizeWindow()
-    {
-        App.MainWindow?.WindowState = WindowState.Minimized;
-    }
-    
-    [RelayCommand]
-    private void MaxRestoreWindow()
-    {
-        App.MainWindow?.WindowState = App.MainWindow.WindowState == WindowState.Maximized
-            ? WindowState.Normal
-            : WindowState.Maximized;
+    // public AppDbService AppDbService { get; }
 
-        IsMaximized = App.MainWindow?.WindowState == WindowState.Maximized;
-    }
-    
+    // [ObservableProperty] private bool _isMaximized; 
+
+    // public MainWindowViewModel(AppsListViewModel appsList, AppInfoViewModel appInfo, TrackingService tracking, AppDbService appDbService, OverlayViewModel overlay)
+    // {
+    //     // AppsList = appsList;
+    //     // AppInfo = appInfo;
+    //     Overlay = overlay;
+    //     
+    //     TrackingService = tracking;
+    //     AppDbService = appDbService;
+    // }
+
+    // public MainWindowViewModel()
+    // {
+    //     AppDbService = new AppDbService();
+    //     TrackingService = new TrackingService();
+    //     AppsList = new AppsListViewModel(TrackingService, AppDbService);
+    //     Overlay = new OverlayViewModel();
+    //     var chartViewModel = new  ChartViewModel(AppDbService); 
+    //     // AppInfo = new AppInfoViewModel(AppsList, AppDbService, chartViewModel, Overlay);
+    // }
+
+    //
+    //
+    // [RelayCommand]
+    // private void CloseWindow()
+    // {
+    //     App.MainWindow?.Close();
+    // }
+    //
+    //
+    // [RelayCommand]
+    // private void MinimizeWindow()
+    // {
+    //     App.MainWindow?.WindowState = WindowState.Minimized;
+    // }
+    //
+    // [RelayCommand]
+    // private void MaxRestoreWindow()
+    // {
+    //     App.MainWindow?.WindowState = App.MainWindow.WindowState == WindowState.Maximized
+    //         ? WindowState.Normal
+    //         : WindowState.Maximized;
+    //
+    //     IsMaximized = App.MainWindow?.WindowState == WindowState.Maximized;
+    // }
+    //
 }

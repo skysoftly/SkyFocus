@@ -33,8 +33,7 @@
             <Grid RowDefinitions="50 * 40"
                   Margin="0,0,8,0">
                 <Grid Grid.Row="0" ColumnDefinitions="50 * Auto"
-                      Background="#00000000"
-                      PointerPressed="DragWindow">
+                      Background="#00000000">
                     <Image Grid.Column="0" Source="/Assets/icon.png" Width="35" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="SkyFocus" Classes="h5"/>
@@ -46,16 +45,16 @@
                                 Spacing="5"
                                 Margin="5">
 
-                        <Button Command="{Binding MinimizeWindowCommand}" Classes="window">
+                        <Button  Classes="window">
                             <Image Source="/Assets/Icons/minus.png" Width="20"/>
                         </Button>
-                        <Button Command="{Binding MaxRestoreWindowCommand}" Classes="window">
+                        <Button  Classes="window">
                             <Grid>
-                                <Image Source="/Assets/Icons/square.png" IsVisible="{Binding !IsMaximized}" Width="20" />
-                                <Image Source="/Assets/Icons/double_square.png" IsVisible="{Binding IsMaximized}" Width="20" />
+                                <Image Source="/Assets/Icons/square.png" IsVisible="True" Width="20" />
+                                <Image Source="/Assets/Icons/double_square.png" IsVisible="False" Width="20" />
                             </Grid>
                         </Button>
-                        <Button Command="{Binding CloseWindowCommand}" Classes="window close">
+                        <Button Classes="window close">
                             <Image Source="/Assets/Icons/cross.png" Width="20"/>
                         </Button>
 
@@ -84,7 +83,7 @@
                             </Border>
                             <Border Grid.Column="2" Classes="Tile">
 
-                                <ContentControl Content="{Binding AppInfo}" />
+                                <!-- <ContentControl Content="{Binding AppInfo}" /> -->
 
                             </Border>
 
