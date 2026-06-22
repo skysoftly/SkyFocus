@@ -1,9 +1,12 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SkyFocus.Data;
@@ -15,6 +18,7 @@ namespace SkyFocus;
 
 public partial class App : Application
 {
+    private TrayIcon? _tray;
     public static MainWindow? MainWindow { get; private set; }
 
     public override void Initialize()
@@ -31,8 +35,10 @@ public partial class App : Application
         
         services.AddSingleton<TrackingService>();
         services.AddSingleton<AppDbService>();
-
+        services.AddSingleton<IConfirmService>(sp =>
+            sp.GetRequiredService<OverlayViewModel>());
         
+        services.AddSingleton<OverlayViewModel>();
         services.AddSingleton<AppsListViewModel>();
         services.AddSingleton<AppInfoViewModel>();
         services.AddSingleton<MainWindowViewModel>();
@@ -47,6 +53,10 @@ public partial class App : Application
             MainWindow = new MainWindow();
             MainWindow.DataContext = provider.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = MainWindow;
+            
+            
+            var tray = new TrayService(desktop, MainWindow);
+            tray.Init();
         }
 
         base.OnFrameworkInitializationCompleted();

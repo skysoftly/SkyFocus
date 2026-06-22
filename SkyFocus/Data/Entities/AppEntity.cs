@@ -1,4 +1,6 @@
-﻿namespace SkyFocus.Data.Entities;
+﻿using System.Collections.Generic;
+
+namespace SkyFocus.Data.Entities;
 
 public class AppEntity
 {

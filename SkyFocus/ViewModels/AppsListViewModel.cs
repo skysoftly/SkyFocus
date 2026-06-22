@@ -15,7 +15,7 @@ public partial class AppsListViewModel : ViewModelBase
 {
     private AppDbService AppDbService { get; }
 
-    public ObservableCollection<AppRowDto> Apps { get; set; } = new();
+    [ObservableProperty] private ObservableCollection<AppRowDto> _apps;
     
 
     [ObservableProperty] private AppRowDto? _selectedApp;
@@ -28,6 +28,7 @@ public partial class AppsListViewModel : ViewModelBase
 
     public AppsListViewModel(TrackingService trackingService, AppDbService appDbService)
     {
+        Apps = new();
         AppDbService = appDbService;
         
         _ = LoadAppsAsync();
@@ -45,14 +46,11 @@ public partial class AppsListViewModel : ViewModelBase
         
         var tasks = Apps.Select(async app =>
         {
-            var icon = await IconService.GetIconAsync(app.Path);
+            var icon = IconService.GetIcon(app.Path);
 
             if (icon != null)
             {
-                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-                {
-                    app.Icon = icon;
-                });
+                app.Icon = icon;
             }
         });
 
@@ -68,9 +66,8 @@ public partial class AppsListViewModel : ViewModelBase
             {
                 app.IsRunning = running.Contains(app.ProcessName);
             }
+            ResortApps();
         });
-
-        ResortApps();
     }
     
     private void OnActiveAppChanged(string processName)
@@ -87,7 +84,7 @@ public partial class AppsListViewModel : ViewModelBase
     
 
     [RelayCommand]
-    private async Task ToggleFavorite(AppRowDto app)
+    public async Task ToggleFavorite(AppRowDto app)
     {
         ResortApps();
         await AppDbService.UpdateAppAsync(app);
@@ -122,4 +119,9 @@ public partial class AppsListViewModel : ViewModelBase
         }
     }
 
+    public async Task Delete(AppRowDto selectedApp)
+    {
+        Apps.Remove(selectedApp);
+        await AppDbService.RemoveAppAsync(selectedApp.Id);
+    }
 }

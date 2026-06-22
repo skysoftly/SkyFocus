@@ -56,4 +56,14 @@ public class AppDbService
         
         await db.SaveChangesAsync();
     }
+    
+    
+    public async Task RemoveAppAsync(int id)
+    {
+        using var db = new AppDbContext();
+
+        await db.Apps.Where(x => x.Id == id).ExecuteDeleteAsync();
+
+        await db.SaveChangesAsync();
+    }
 }

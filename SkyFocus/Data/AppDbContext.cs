@@ -6,7 +6,6 @@ namespace SkyFocus.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<AppEntity> Apps => Set<AppEntity>();
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite($"Data Source={DbPath.GetPath()}"); 

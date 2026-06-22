@@ -7,40 +7,102 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkyFocus.Views.AppInfoView"
              x:DataType="vm:AppInfoViewModel">
-    
+
     <Design.DataContext>
         <vm:AppInfoViewModel />
     </Design.DataContext>
-    
+
     <UserControl.Styles>
         <StyleInclude Source="/Styles/MainStyles.axaml" />
+        <StyleInclude Source="/Styles/AppInfoStyles.axaml" />
     </UserControl.Styles>
-    
-    <Grid ColumnDefinitions="* *" RowDefinitions="Auto *" Margin="5"
-          IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}">
-        <StackPanel Orientation="Vertical" Margin="20" Spacing="30">
-            <StackPanel Orientation="Horizontal" Spacing="30" Margin="10">
-                <Image Source="{Binding SelectedApp?.Icon}" Height="40" Width="40" />
-                <StackPanel>
-                    <TextBlock Text="{Binding  SelectedApp?.Name}" FontSize="20" />
-                </StackPanel>
-            </StackPanel>
-            <Grid ColumnDefinitions="* 50" ColumnSpacing="10">
-                <Button Grid.Column="0" 
-                        Classes="app-toggle-button"
-                        HorizontalAlignment="Stretch"
-                        Height="50"
-                        Command="{Binding ToggleAppCommand}">
-                    <controls:StateTextBlock
-                        ActiveText="✕ Закрыть"
-                        InactiveText="▶ Запустить"
-                        IsChecked="{Binding SelectedApp?.IsRunning}" />
-                </Button>
-                <!-- <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="50" -->
-                <!--         Content="-" -->
-                <!--         Command="{Binding DeleteAppCommand}" /> -->
-            </Grid>
-        </StackPanel>
 
+    <Grid Margin="5"
+          IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}"
+          RowSpacing="10"
+          ColumnSpacing="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid RowDefinitions="Auto Auto Auto" Margin="10" RowSpacing="10">
+
+            <Grid Grid.Row="0" ColumnDefinitions="Auto *">
+                <Image Source="{Binding SelectedApp?.Icon}" Height="40" Width="40" Margin="10" />
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding  SelectedApp?.Name}" FontSize="20" Classes="app-name"
+                                   VerticalAlignment="Center" MaxWidth="" />
+
+                        <ToggleButton IsChecked="{Binding SelectedApp?.IsFavorite}"
+                                      Command="{Binding ToggleFavoriteCommand}"
+                                      Classes="favorite-toggle"
+                                      HorizontalAlignment="Left" />
+                    </StackPanel>
+                    <controls:StateTextBlock Classes="app-state" ActiveText="● Запущено" InactiveText="○ Не запущено"
+                                             IsChecked="{Binding  SelectedApp?.IsRunning}" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" ColumnDefinitions="* Auto" ColumnSpacing="10" Width="230" HorizontalAlignment="Left">
+                <Button Grid.Column="0"
+                        Classes="app-toggle-on"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        IsVisible="{Binding SelectedApp?.IsRunning}"
+                        Height="40"
+                        Command="{Binding ToggleAppCommand}">
+                    <Grid ColumnDefinitions="Auto *" ColumnSpacing="5">
+                        <Image Grid.Column="0" Source="/Assets/Icons/cross.png" Width="15" />
+                        <TextBlock Grid.Column="1" Text="Закрыть" />
+                    </Grid>
+                </Button>
+                <Button Grid.Column="0"
+                        Classes="app-toggle-off"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        IsVisible="{Binding !SelectedApp?.IsRunning}"
+                        Height="40"
+                        Command="{Binding ToggleAppCommand}">
+                    <Grid ColumnDefinitions="Auto *" ColumnSpacing="5">
+                        <Image Source="/Assets/Icons/play.png" Width="15" />
+                        <TextBlock Grid.Column="1" Text="Открыть" />
+                    </Grid>
+                </Button>
+                <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="40" Width="40"
+                        Classes="app-info">
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Удалить"
+                                      Command="{Binding DeleteCommand}" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <Image Source="/Assets/Icons/down-arrow.png" Width="20" />
+                </Button>
+            </Grid>
+
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Border Classes="Tile">
+                <Grid ColumnDefinitions="Auto * Auto" ColumnSpacing="5" Margin="8">
+                    <Button Grid.Column="0" Classes="copy" Content="📂" Command="{Binding OpenFolderCommand}"/>
+                    <StackPanel Grid.Column="1" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="Путь к файлу" Classes="caption" />
+                        <TextBlock Text="{Binding SelectedApp?.Path}" TextTrimming="CharacterEllipsis"
+                                   Classes="caption-white" />
+                    </StackPanel>
+                    <Button Grid.Column="2" Classes="copy" Content="📋" Command="{Binding CopyPathCommand}"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
