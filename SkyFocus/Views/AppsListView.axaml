@@ -32,7 +32,7 @@
             <TextBox Grid.Column="1" Margin="5 0" PlaceholderText="🔍︎ Поиск приложений..." Text="{Binding SearchText}" Classes="h5"></TextBox>
         </Grid>
         <Border Grid.Row="1" Classes="Separator" />
-        <ListBox x:Name="AppsListBox" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp}">
+        <ListBox Grid.Row="2" x:Name="AppsListBox" ItemsSource="{Binding Apps}" SelectedItem="{Binding SelectedApp}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="15, Auto, *, Auto, Auto" MinHeight="50">
