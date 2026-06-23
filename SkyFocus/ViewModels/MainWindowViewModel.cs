@@ -15,6 +15,7 @@ namespace SkyFocus.ViewModels;
 public partial class MainWindowViewModel(
     AppsListViewModel appsList,
     AppInfoViewModel appInfo,
+    GeneralStatisticsViewModel generalStatistics,
     TrackingService tracking,
     OverlayViewModel overlay,
     WindowBarViewModel windowBar)
@@ -24,6 +25,7 @@ public partial class MainWindowViewModel(
     public AppsListViewModel AppsList { get; } = appsList;
     public AppInfoViewModel AppInfo { get; } = appInfo;
     public OverlayViewModel Overlay { get; } = overlay;
+    public GeneralStatisticsViewModel GeneralStatistics { get; } = generalStatistics;
 
     public TrackingService TrackingService { get; } = tracking;
 }

@@ -17,10 +17,11 @@
                       Padding="10,6"
                       CornerRadius="6"/>
         </Grid>
-        <lvc:CartesianChart Grid.Row="1" Series="{Binding Series}">
-            <lvc:CartesianChart.XAxes>
-                <lvc:XamlAxis Labels="{Binding Labels}" LabelsRotation="0"/>
-            </lvc:CartesianChart.XAxes>
+        <lvc:CartesianChart Grid.Row="1" 
+                            Series="{Binding Series}"
+                            ZoomMode="{Binding ZoomMode}"
+                            XAxes="{Binding XAxes}"
+                            YAxes="{Binding YAxes}">
         </lvc:CartesianChart>
     </Grid>
 </UserControl>

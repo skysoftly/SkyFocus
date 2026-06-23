@@ -90,32 +90,32 @@
 
                 <Border Grid.Column="0" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Время за день" FontSize="10" Foreground="Gray" />
+                        <TextBlock Text="Время за неделю" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SelectedApp?.UsageTimeSeconds, Converter={StaticResource SecondsToTimeString}}"
+                                   Text="{Binding SecondWeek, Converter={StaticResource SecondsToTimeString}}"
                                    FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>
                 </Border>
                 <Border Grid.Row="0" Grid.Column="1" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Время за неделю" FontSize="10" Foreground="Gray" />
+                        <TextBlock Text="Время за месяц" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SecondWeek, Converter={StaticResource SecondsToTimeString}}"
+                                   Text="{Binding SecondMonth, Converter={StaticResource SecondsToTimeString}}"
                                    FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>
                 </Border>
 
                 <Border Grid.Row="1" Grid.Column="0" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Время за месяц" FontSize="10" Foreground="Gray" />
+                        <TextBlock Text="Время за всё время" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SecondMonth, Converter={StaticResource SecondsToTimeString}}"
+                                   Text="{Binding SecondAll, Converter={StaticResource SecondsToTimeString}}"
                                    FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>
                 </Border>
                 <Border Grid.Row="1" Grid.Column="1" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Всего запусков" FontSize="10" Foreground="Gray" />
+                        <TextBlock Text="Всего запусков" Classes="caption"  />
                         <TextBlock Grid.Row="1" Text="{Binding SelectedApp?.LaunchCount}" FontSize="15"
                                    Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>

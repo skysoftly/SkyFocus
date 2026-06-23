@@ -122,4 +122,14 @@ public class AppDbService
             .OrderBy(s => s.Date)
             .ToListAsync();
     }
+
+    public async Task<List<DateTime>> GetStatsForAppAsync(int appId)
+    {
+        return await new AppDbContext().DailyStats
+            .Where(s => s.AppId == appId)
+            .Select(s => s.Date.Date)
+            .Distinct()
+            .OrderBy(d => d)
+            .ToListAsync();
+    }
 }

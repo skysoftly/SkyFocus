@@ -21,6 +21,7 @@ public partial class AppInfoViewModel : ViewModelBase
     
     [ObservableProperty] private int _secondWeek; 
     [ObservableProperty] private int _secondMonth; 
+    [ObservableProperty] private int _secondAll; 
     
     [ObservableProperty] private bool _isEditing; 
     [ObservableProperty] private int _caretIndex; 
@@ -67,6 +68,7 @@ public partial class AppInfoViewModel : ViewModelBase
             var today = DateTime.Today;
             var startOfWeek = today.AddDays(-7);
             var startOfMonth = today.AddDays(-30);
+            var startOfAll = DateTime.MinValue;
         
             // Получаем за неделю
             var weekData = await _appDbService.GetStatsForAppByDatesAsync(
@@ -83,6 +85,15 @@ public partial class AppInfoViewModel : ViewModelBase
                 today
             );
             SecondMonth = monthData.Sum(x => x.UsageTimeSeconds);
+            
+            // Получаем за всё время
+            var allData = await _appDbService.GetStatsForAppByDatesAsync(
+                SelectedApp.Id, 
+                startOfAll, 
+                today
+            );
+            SecondAll = allData.Sum(x => x.UsageTimeSeconds);
+
             
             _ = Chart.UpdateChart(SelectedApp.Id);
         }

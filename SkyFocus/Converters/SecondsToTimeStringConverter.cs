@@ -12,19 +12,15 @@ public class SecondsToTimeStringConverter : IValueConverter
         
         if (value is int intVal)
             seconds = intVal;
-        else if (value is long longVal)
-            seconds = (int)longVal;
-        else if (value is double doubleVal)
-            seconds = (int)doubleVal;
-        else if (value is string strVal && int.TryParse(strVal, out int parsed))
-            seconds = parsed;
-        else
-            return "0м";
 
         var ts = TimeSpan.FromSeconds(seconds);
 
-        var hours = (int)ts.TotalHours;
+        var days = (int)ts.TotalDays;
+        var hours = ts.Hours;
         var minutes = ts.Minutes;
+
+        if (days > 0)
+            return $"{days}д {hours}ч";
 
         if (hours > 0)
             return $"{hours}ч {minutes}м";

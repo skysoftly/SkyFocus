@@ -118,6 +118,7 @@ public partial class App : Application
         services.AddSingleton<AppInfoViewModel>();
         services.AddSingleton<ChartViewModel>();
         services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<GeneralStatisticsViewModel>();
 
         // Окна
         services.AddSingleton<MainWindow>(sp =>
