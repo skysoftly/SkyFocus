@@ -24,6 +24,7 @@ public class AppDbContext : DbContext
             entity.HasIndex(a => a.Path).IsUnique();
             
             entity.Property(a => a.ProcessName).IsRequired();
+            entity.Property(a => a.NoteText).HasMaxLength(250);
             
             entity.HasIndex(a => a.IsFavorite);
 

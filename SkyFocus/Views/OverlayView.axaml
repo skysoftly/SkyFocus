@@ -7,20 +7,8 @@
              x:Class="SkyFocus.Views.OverlayView"
              x:DataType="vm:OverlayViewModel">
     
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:OverlayViewModel />
-    </Design.DataContext>
-
-    <UserControl.Styles>
-        <StyleInclude Source="/Styles/MainStyles.axaml" />
-    </UserControl.Styles>
-
-    
     <Panel IsVisible="{Binding OverlayVisible}"
            Background="#80000000">
-        
         <Border Width="320"
                 Padding="20"
                 CornerRadius="12"
@@ -31,7 +19,7 @@
             <StackPanel Spacing="10">
 
                 <TextBlock Text="{Binding OverlayText}" />
-                
+
                 <Button Content="Подтвердить"
                         Command="{Binding ConfirmOverlayCommand}" />
 

@@ -18,7 +18,7 @@ namespace SkyFocus.ViewModels;
 public partial class ChartViewModel : ViewModelBase
 {
     private AppDbService AppDbService { get; }
-    public ObservableCollection<DayUsage> Days { get; set; } = [];
+    private ObservableCollection<DayUsage> Days { get; set; } = [];
 
 
     public ISeries[] Series { get; private set; } = [];

@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
+using Microsoft.Extensions.DependencyInjection;
+using SkyFocus.Views;
 
 namespace SkyFocus.Services;
 
@@ -9,21 +11,19 @@ public class TrayService
 {
     
     private readonly IClassicDesktopStyleApplicationLifetime _desktop;
-    private readonly Window _window;
     private TrayIcon? _tray;
 
-    public TrayService(IClassicDesktopStyleApplicationLifetime desktop, Window window)
+    public TrayService(IClassicDesktopStyleApplicationLifetime desktop)
     {
         _desktop = desktop;
-        _window = window;
     }
 
     public void Init()
     {
-        _window.Closing += (_, e) =>
+        App.MainWindow?.Closing += (_, e) =>
         {
             e.Cancel = true;
-            _window.Hide();
+            App.MainWindow.Hide();
         };
 
         _tray = new TrayIcon
@@ -37,7 +37,11 @@ public class TrayService
         var exit = new NativeMenuItem("Выход");
 
         open.Click += (_, _) => Open();
-        exit.Click += (_, _) => _desktop.Shutdown();
+        exit.Click += (_, _) =>
+        {
+            App.MainWindow?.Hide();
+            _desktop.Shutdown();
+        };
 
         _tray.Menu.Items.Add(open);
         _tray.Menu.Items.Add(exit);
@@ -47,8 +51,7 @@ public class TrayService
 
     private void Open()
     {
-        _window.Show();
-        _window.WindowState = WindowState.Normal;
-        _window.Activate();
+        App.MainWindow?.Show();
+        App.MainWindow?.Activate();
     }
 }
