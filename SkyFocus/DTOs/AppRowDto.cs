@@ -17,6 +17,7 @@ public sealed partial class AppRowDto : ObservableObject
     [ObservableProperty] private bool _isFavorite;
     [ObservableProperty] private bool _isRunning;
     [ObservableProperty] private bool _isActive;
+    [ObservableProperty] private string _noteText = string.Empty;
     
     
     [ObservableProperty] private int _usageTimeSeconds;

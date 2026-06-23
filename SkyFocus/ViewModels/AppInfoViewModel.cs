@@ -15,35 +15,55 @@ namespace SkyFocus.ViewModels;
 
 public partial class AppInfoViewModel : ViewModelBase
 {
+    private readonly AppDbService _appDbService;
+    private readonly AppService _appService;
+    private readonly IConfirmService _confirm;
+    
     [ObservableProperty] private int _secondWeek; 
     [ObservableProperty] private int _secondMonth; 
     
+    [ObservableProperty] private bool _isEditing; 
+    [ObservableProperty] private int _caretIndex; 
     
-    [ObservableProperty] private AppRowDto? _selectedApp; 
+    [ObservableProperty] AppRowDto? _selectedApp;
     public ChartViewModel Chart {get;}
 
-    public AppsListViewModel AppsListViewModel { get; }
-    private readonly AppDbService _appDbService;
-    private readonly IConfirmService _confirm;
 
-    public AppInfoViewModel(AppsListViewModel appsList, AppDbService appDbService, ChartViewModel chartViewModel, IConfirmService confirm)
+    partial void OnIsEditingChanged(bool value)
     {
-        AppsListViewModel = appsList;
-        _appDbService = appDbService;
-        Chart = chartViewModel;
-        _confirm = confirm;
-        // appsList.SelectedAppChanged += SelectedAppChanged;
+        if (!value)
+            _ = SaveEdit();
     }
 
-    private async void SelectedAppChanged(AppRowDto? selectedApp)
+    public AppInfoViewModel(ChartViewModel chartViewModel, AppService appService, AppDbService appDbService, IConfirmService confirmService)
+    {
+        Chart = chartViewModel;
+        _appService = appService;
+        _appDbService = appDbService;
+        _confirm = confirmService;
+        
+        _appService.PropertyChanged += async (s, e) =>
+        {
+            if (e.PropertyName == nameof(_appService.SelectedApp))
+            {
+                await SelectedAppChanged(_appService.SelectedApp);
+            }
+        };
+        
+        SelectedApp = _appService.SelectedApp;
+    }
+
+
+    private async Task SelectedAppChanged(AppRowDto? selectedApp)
     {
         if (SelectedApp == selectedApp || selectedApp == null) return;
         
         SelectedApp = selectedApp;
-
+    
         
         if (SelectedApp != null)
         {
+            IsEditing = false;
             var today = DateTime.Today;
             var startOfWeek = today.AddDays(-7);
             var startOfMonth = today.AddDays(-30);
@@ -70,7 +90,7 @@ public partial class AppInfoViewModel : ViewModelBase
     
 
     [RelayCommand]
-    private async Task ToggleApp()
+    private void ToggleApp()
     {
         if (SelectedApp == null) return;
         
@@ -122,27 +142,25 @@ public partial class AppInfoViewModel : ViewModelBase
     private async Task ToggleFavorite()
     {
         if (SelectedApp == null) return;
-        // await AppsListViewModel.ToggleFavorite(SelectedApp);
+        await _appService.ToggleFavorite(SelectedApp);
     }
 
     
     [RelayCommand]
-    public async Task Delete()
+    private async Task Delete()
     {
         bool ok = await _confirm.Show("Удалить объект?");
-
+    
         if (!ok)
             return;
-
-        // удаление
-
-        // AppsListViewModel.Delete(SelectedApp!);
+    
+        await _appService.Delete(SelectedApp!);
     }
 
 
 
     [RelayCommand]
-    public void OpenFolderCommand()
+    private void OpenFolder()
     {
         
         if (string.IsNullOrEmpty(SelectedApp?.Path)) return;
@@ -169,9 +187,8 @@ public partial class AppInfoViewModel : ViewModelBase
 
 
     [RelayCommand]
-    public async Task CopyPathCommand()
+    private async Task CopyPath()
     {
-        
         if (string.IsNullOrEmpty(SelectedApp?.Path)) return;
     
         try
@@ -186,6 +203,23 @@ public partial class AppInfoViewModel : ViewModelBase
         {
             Console.WriteLine($"Ошибка копирования: {ex.Message}");
         }
+    }
+    
+    
+    [RelayCommand]
+    private void Edit()
+    {
+        IsEditing = true;
+        CaretIndex = SelectedApp?.NoteText.Length ?? 0;
+    }
+
+    [RelayCommand]
+    private async Task SaveEdit()
+    {
+        IsEditing = false;
+
+        if (SelectedApp != null) 
+            await _appDbService.UpdateAppAsync(SelectedApp );
     }
 
 }

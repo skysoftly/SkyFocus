@@ -24,6 +24,6 @@
         <StyleInclude Source="avares://SkyFocus/Styles/MainStyles.axaml" />
         <StyleInclude Source="avares://SkyFocus/Styles/AppsListStyles.axaml" />
         <StyleInclude Source="avares://SkyFocus/Styles/ChartStyles.axaml" />
-        <StyleInclude Source="avares://SkyFocus/Styles/AppsListStyles.axaml" />
+        <StyleInclude Source="avares://SkyFocus/Styles/AppInfoStyles.axaml" />
     </Application.Styles>
 </Application>

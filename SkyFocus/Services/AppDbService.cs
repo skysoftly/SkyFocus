@@ -38,6 +38,7 @@ public class AppDbService
         
         entity.Name = dto.Name;
         entity.Path = dto.Path;
+        entity.NoteText = dto.NoteText;
         entity.LaunchCount = dto.LaunchCount;
         entity.ProcessName = dto.ProcessName;
         entity.IsFavorite = dto.IsFavorite;
@@ -96,6 +97,7 @@ public class AppDbService
                 ProcessName = a.ProcessName,
                 LaunchCount = a.LaunchCount,
                 IsFavorite = a.IsFavorite,
+                NoteText = a.NoteText,
                 UsageTimeSeconds = a.DailyStats
                     .Where(s => s.Date == today)
                     .Sum(s => s.UsageTimeSeconds)

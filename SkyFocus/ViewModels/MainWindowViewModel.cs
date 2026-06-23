@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LiveChartsCore.SkiaSharpView.Avalonia;
 using SkyFocus.DTOs;
 using SkyFocus.Services;
 using SkyFocus.Utils;
@@ -24,8 +25,5 @@ public partial class MainWindowViewModel(
     public AppInfoViewModel AppInfo { get; } = appInfo;
     public OverlayViewModel Overlay { get; } = overlay;
 
-    public TrackingService TrackingService { get; }= tracking;
-    
-    
-    
+    public TrackingService TrackingService { get; } = tracking;
 }

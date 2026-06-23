@@ -15,7 +15,8 @@
         Title="SkyFocus"
         WindowDecorations="BorderOnly"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaTitleBarHeightHint="50">
+        ExtendClientAreaTitleBarHeightHint="50"
+        WindowState="{Binding WindowBar.WindowState, Mode=TwoWay}">
 
     <Grid>
         <Image Source="/Assets/bg.jpg" Stretch="UniformToFill" />
@@ -23,7 +24,7 @@
             <Grid RowDefinitions="50 * 40"
                   Margin="0,0,8,0">
                 <ContentControl Content="{Binding WindowBar}" />
-                <Grid Grid.Row="1" RowDefinitions=" *"
+                <Grid Grid.Row="1" 
                       ColumnDefinitions="50 *">
 
                     <Grid Grid.Column="1">
@@ -33,25 +34,26 @@
                             <RowDefinition Height="*" MinHeight="160" />
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0">
+                        <Grid Grid.Row="0"
+                              x:Name="TopGrid" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" MinWidth="400" />
+                                <ColumnDefinition Width="*" MinWidth="400"/>
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="2*" MinWidth="700" />
                             </Grid.ColumnDefinitions>
 
                             <Border Grid.Column="0" Classes="Tile">
-                                <!-- <ContentControl Margin="10" Content="{Binding AppsList}" /> -->
+                                <ContentControl Content="{Binding AppsList}" />
                             </Border>
-                            <Border Grid.Column="2" Classes="Tile">
-
-                                <!-- <ContentControl Content="{Binding AppInfo}" /> -->
-
-                            </Border>
-
                             <GridSplitter Grid.Column="1"
                                           Classes="TileSplitter VerticalTileSplitter"
                                           ResizeDirection="Columns" />
+                            <Border Grid.Column="2" Classes="Tile">
+
+                                <ContentControl Content="{Binding AppInfo}" />
+
+                            </Border>
+
                         </Grid>
 
                         <GridSplitter Grid.Row="1"

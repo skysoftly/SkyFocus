@@ -11,6 +11,7 @@ public class AppEntity
     public string ProcessName { get; set; } = string.Empty;
     public int LaunchCount { get; set; }
     public bool IsFavorite { get; set; }
+    public string NoteText { get; set; } = string.Empty;
 
     public ICollection<DailyAppStatEntity> DailyStats { get; set; } = new List<DailyAppStatEntity>();
 }
