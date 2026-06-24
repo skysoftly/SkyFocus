@@ -21,7 +21,7 @@ public class StateTextBlock : TextBlock
     }
 
     public static readonly StyledProperty<string> ActiveTextProperty =
-        AvaloniaProperty.Register<StateTextBlock, string>(nameof(ActiveText), "● Запущено");
+        AvaloniaProperty.Register<StateTextBlock, string>(nameof(ActiveText), string.Empty);
 
     public string ActiveText
     {
@@ -30,7 +30,7 @@ public class StateTextBlock : TextBlock
     }
 
     public static readonly StyledProperty<string> InactiveTextProperty =
-        AvaloniaProperty.Register<StateTextBlock, string>(nameof(InactiveText), "○ Не запущено");
+        AvaloniaProperty.Register<StateTextBlock, string>(nameof(InactiveText), string.Empty);
 
     public string InactiveText
     {
@@ -40,14 +40,12 @@ public class StateTextBlock : TextBlock
 
     public StateTextBlock()
     {
-        // Устанавливаем начальный текст
         UpdateText();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-            
         if (change.Property == IsCheckedProperty || 
             change.Property == ActiveTextProperty || 
             change.Property == InactiveTextProperty)
@@ -58,7 +56,14 @@ public class StateTextBlock : TextBlock
 
     private void UpdateText()
     {
-        Text = IsChecked ? ActiveText : InactiveText;
+        var newText = IsChecked ? ActiveText : InactiveText;
+    
+        if (string.IsNullOrWhiteSpace(newText))
+        {
+            newText = Text;
+        }
+    
+        Text = newText;
     }
 
     private void UpdatePseudoClasses()

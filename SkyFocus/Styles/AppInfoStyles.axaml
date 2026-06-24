@@ -136,4 +136,19 @@
         </Style>
     </Style>
 
+    
+    <Style Selector="TextBlock.NoteBox">
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#a08351a9" />
+
+        <Style Selector="^:pointerover /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#b08246af" />
+        </Style>
+        <Style Selector="^:pressed /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#b0643489" />
+        </Style>
+    </Style>
 </Styles>

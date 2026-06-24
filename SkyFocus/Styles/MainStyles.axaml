@@ -234,9 +234,17 @@
         <Setter Property="Foreground" Value="#66FFFFFF" />
     </Style>
 
-    <Style Selector="controls|StateTextBlock.caption_color">
+    <Style Selector="controls|StateTextBlock.caption_green">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#66FFFFFF" />
+        <Style Selector="^:checked">
+            <Setter Property="Foreground" Value="#4CAF50" />
+        </Style>
+    </Style>
+    
+    <Style Selector="controls|StateTextBlock.caption_color">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="Foreground" Value="#A8343C" />
         <Style Selector="^:checked">
             <Setter Property="Foreground" Value="#4CAF50" />
         </Style>
@@ -284,5 +292,15 @@
         </Style>
     </Style>
     
+    <!-- <Style Selector="Panel.close"> -->
+    <!-- -->
+    <!--     <Style Selector="^:pointerover /template/ContentPresenter"> -->
+    <!--         <Setter Property="Background" Value="#d7424d" /> -->
+    <!--     </Style> -->
+    <!--     <Style Selector="^:pressed /template/ContentPresenter"> -->
+    <!--         <Setter Property="Background" Value="#8b272e" /> -->
+    <!--     </Style> -->
+    <!-- </Style> -->
+
 
 </Styles>

@@ -4,6 +4,8 @@ namespace SkyFocus.DTOs;
 
 public class AppStatsDto
 {
+    public int LaunchCount { get; set; }
+    public int Id { get; set; }
     public int AppId { get; set; }
     public string AppName { get; set; } = string.Empty;
     public DateTime Date { get; set; }

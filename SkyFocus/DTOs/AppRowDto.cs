@@ -12,7 +12,7 @@ public sealed partial class AppRowDto : ObservableObject
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _path = string.Empty;
     [ObservableProperty] private string _processName = string.Empty;
-    [ObservableProperty] private int _launchCount;
+    [ObservableProperty] private string? _iconPath;
     
     [ObservableProperty] private bool _isFavorite;
     [ObservableProperty] private bool _isRunning;

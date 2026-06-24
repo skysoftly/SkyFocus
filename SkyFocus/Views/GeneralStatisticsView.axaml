@@ -2,59 +2,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             xmlns:controls="clr-namespace:SkyFocus.Controls"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SkyFocus.Views.GeneralStatisticsView">
+             x:Class="SkyFocus.Views.GeneralStatisticsView"
+             x:DataType="vm:GeneralStatisticsViewModel">
     <StackPanel Margin="10" Spacing="10">
-        <TextBlock Text="Общая статистика" Classes="h5"/>
-        <Grid ColumnDefinitions="* * * *" ColumnSpacing="10">
+        <Grid ColumnDefinitions="*">
+            <TextBlock Text="Общая статистика" Classes="h5" VerticalAlignment="Center"/>
+        </Grid>
+        <Grid ColumnSpacing="10">
             
-            <Border Grid.Column="0" Classes="Tile" Height="80" Width="150">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="190" />
+                <ColumnDefinition Width="*" MinWidth="190"/>
+                <ColumnDefinition Width="*" MinWidth="190"/>
+                <ColumnDefinition Width="*" MinWidth="190"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Classes="Tile" Height="80">
                 <Grid RowDefinitions="* * *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                     <TextBlock Text="Сегодня" Classes="caption" />
                     <TextBlock Grid.Row="1"
-                               Text="8ч 23м"
+                               Text="{Binding TotalSecondsToday, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="^ 12%" Classes="caption" Foreground="YellowGreen"/>
-                        <TextBlock Text="больше, чем вчера" Classes="caption"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeToday, Converter={StaticResource GreaterThanZeroConverter}}">
+                        <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeTodayDisplay}" IsChecked="{Binding ChangeTodayUp}" />
+                        <controls:StateTextBlock Classes="caption" ActiveText="больше, чем вчера" InactiveText="меньше, чем вчера" IsChecked="{Binding ChangeTodayUp}" Margin="5 0"/>
                     </StackPanel>
                 </Grid>
             </Border>
             
-            <Border Grid.Column="1" Classes="Tile" Height="80" Width="150">
+            <Border Grid.Column="1" Classes="Tile" Height="80">
                 <Grid RowDefinitions="* * *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                     <TextBlock Text="На этой неделе" Classes="caption" />
                     <TextBlock Grid.Row="1"
-                               Text="8ч 23м"
+                               Text="{Binding TotalSecondsWeek, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="^ 12%" Classes="caption" Foreground="YellowGreen"/>
-                        <TextBlock Text="больше, чем вчера" Classes="caption"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeWeek, Converter={StaticResource GreaterThanZeroConverter}}">
+                        <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeWeekDisplay}" IsChecked="{Binding ChangeWeekUp}" />
+                        <controls:StateTextBlock Classes="caption" ActiveText="больше, чем на прошлой" InactiveText="меньше, чем на прошлой" IsChecked="{Binding ChangeWeekUp}" Margin="5 0"/>
                     </StackPanel>
                 </Grid>
             </Border>
             
-            <Border Grid.Column="2" Classes="Tile" Height="80" Width="150">
+            <Border Grid.Column="2" Classes="Tile" Height="80">
                 <Grid RowDefinitions="* * *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                     <TextBlock Text="В этом месяце" Classes="caption" />
                     <TextBlock Grid.Row="1"
-                               Text="8ч 23м"
+                               Text="{Binding TotalSecondsMonth, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="^ 12%" Classes="caption" Foreground="YellowGreen"/>
-                        <TextBlock Text="больше, чем вчера" Classes="caption"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeMonth, Converter={StaticResource GreaterThanZeroConverter}}">
+                        <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeMonthDisplay}" IsChecked="{Binding ChangeMonthUp}" />
+                        <controls:StateTextBlock Classes="caption" ActiveText="больше, чем в прошлом" InactiveText="меньше, чем в прошлом" IsChecked="{Binding ChangeMonthUp}" Margin="5 0"/>
                     </StackPanel>
                 </Grid>
             </Border>
-            <Border Grid.Column="3" Classes="Tile" Height="80" Width="150">
+            <Border Grid.Column="3" Classes="Tile" Height="80">
                 <Grid RowDefinitions="* * *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                     <TextBlock Text="Всего" Classes="caption" />
                     <TextBlock Grid.Row="1"
-                               Text="8ч 23м"
+                               Text="{Binding TotalSecondsAll, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="Всего запусков:" Classes="caption"/>
-                        <TextBlock Text="892" Classes="caption"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        
                     </StackPanel>
                 </Grid>
             </Border>

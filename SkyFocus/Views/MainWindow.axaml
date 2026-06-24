@@ -26,54 +26,19 @@
                 <ContentControl Content="{Binding WindowBar}" />
                 <Grid Grid.Row="1" 
                       ColumnDefinitions="50 *">
-
-                    <Grid Grid.Column="1" RowSpacing="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="150"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0"
-                              x:Name="TopGrid" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" MinWidth="400"/>
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="2*" MinWidth="700" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0" Classes="Tile">
-                                <ContentControl Content="{Binding AppsList}" />
-                            </Border>
-                            <GridSplitter Grid.Column="1"
-                                          Classes="TileSplitter VerticalTileSplitter"
-                                          ResizeDirection="Columns" />
-                            <Border Grid.Column="2" Classes="Tile">
-
-                                <ContentControl Content="{Binding AppInfo}" />
-
-                            </Border>
-
-                        </Grid>
-
-                        <!-- <GridSplitter Grid.Row="1" -->
-                                      <!-- Classes="TileSplitter HorizontalTileSplitter" -->
-                                      <!-- ResizeDirection="Rows" /> -->
-
-                        <Grid Grid.Row="1" ColumnSpacing="10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0" Classes="Tile">
-
-                            </Border>
-                            <Border Grid.Column="1" Classes="Tile">
-                                <ContentControl Content="{Binding GeneralStatistics}" />
-                            </Border>
-
-                        </Grid>
-                    </Grid>
+                    <StackPanel Orientation="Vertical" Spacing="8">
+                        <RadioButton GroupName="ViewMode"
+                                     IsChecked="True"
+                                     Command="{Binding SelectMainPageCommand}"
+                                     Content="1"/>
+    
+                        <RadioButton GroupName="ViewMode"
+                                     Command="{Binding SelectChartPageCommand}"
+                                     Content="2"/>
+                    </StackPanel>
+                    
+                    
+                    <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
                 </Grid>
                 <Grid Grid.Row="2"
                       VerticalAlignment="Center" Margin="5"
@@ -81,7 +46,7 @@
                       ColumnSpacing="10">
                     <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center" Width="170">
                         <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color"
+                            <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_green"
                                                      IsChecked="{Binding TrackingService.IsRunning}" />
                             <controls:StateTextBlock ActiveText="Отслеживание активно"
                                                      InactiveText="Отслеживание не активно"
@@ -111,7 +76,5 @@
                 </Grid>
             </Grid>
         </Border>
-        
-        <ContentControl Content="{Binding Overlay}"/>
     </Grid>
 </Window>

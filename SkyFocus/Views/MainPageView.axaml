@@ -1,0 +1,54 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             xmlns:skyFocus="clr-namespace:SkyFocus"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkyFocus.Views.MainPageView"
+             x:DataType="vm:MainPageViewModel">
+
+    <Grid RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              x:Name="TopGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="400" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="2*" MinWidth="700" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Classes="Tile">
+                <ContentControl Content="{Binding AppsList}" />
+            </Border>
+            <GridSplitter Grid.Column="1"
+                          Classes="TileSplitter VerticalTileSplitter"
+                          ResizeDirection="Columns" />
+            <Border Grid.Column="2" Classes="Tile">
+
+                <ContentControl Content="{Binding AppInfo}" />
+
+            </Border>
+
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Classes="Tile">
+
+            </Border>
+            <Border Grid.Column="1" Classes="Tile">
+                <ContentControl Content="{Binding GeneralStatistics}" />
+            </Border>
+
+        </Grid>
+    </Grid>
+</UserControl>

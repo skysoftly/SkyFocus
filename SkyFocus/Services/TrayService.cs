@@ -40,6 +40,7 @@ public class TrayService
         exit.Click += (_, _) =>
         {
             App.MainWindow?.Hide();
+            _tray.Dispose();
             _desktop.Shutdown();
         };
 

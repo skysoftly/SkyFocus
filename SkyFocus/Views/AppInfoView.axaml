@@ -13,14 +13,7 @@
           IsVisible="{Binding SelectedApp, Converter={x:Static ObjectConverters.IsNotNull}}"
           RowSpacing="10"
           ColumnSpacing="10">
-        <!-- -->
-        <!-- <Grid.RowDefinitions> -->
-        <!--     <RowDefinition Height="Auto" /> -->
-        <!--     <RowDefinition Height="Auto" /> -->
-        <!--     <RowDefinition Height="*" /> -->
-        <!--     <RowDefinition Height="Auto" /> -->
-        <!-- </Grid.RowDefinitions> -->
-
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="250" />
             <ColumnDefinition Width="2*" />
@@ -77,6 +70,8 @@
                         <MenuFlyout>
                             <MenuItem Header="Удалить"
                                       Command="{Binding DeleteCommand}" />
+                            <MenuItem Header="Изменить путь"
+                                      Command="{Binding EditPathCommand}" />
                         </MenuFlyout>
                     </Button.Flyout>
                     <Image Source="/Assets/Icons/down-arrow.png" Width="20" />
@@ -88,7 +83,15 @@
                   ColumnDefinitions="* *" ColumnSpacing="10" 
                   RowDefinitions="* *" RowSpacing="10">
 
-                <Border Grid.Column="0" Classes="Tile" Height="60">
+                <Border Grid.Row="0" Grid.Column="0" Classes="Tile" Height="60">
+                    <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
+                        <TextBlock Text="Время за сегодня" Classes="caption"  />
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding SelectedApp?.UsageTimeSeconds, Converter={StaticResource SecondsToTimeString}}"
+                                   FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
+                    </Grid>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за неделю" Classes="caption" />
                         <TextBlock Grid.Row="1"
@@ -96,7 +99,7 @@
                                    FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="1" Classes="Tile" Height="60">
+                <Border Grid.Row="1" Grid.Column="0" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за месяц" Classes="caption" />
                         <TextBlock Grid.Row="1"
@@ -105,19 +108,12 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="0" Classes="Tile" Height="60">
+                <Border Grid.Row="1" Grid.Column="1" Classes="Tile" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за всё время" Classes="caption" />
                         <TextBlock Grid.Row="1"
                                    Text="{Binding SecondAll, Converter={StaticResource SecondsToTimeString}}"
                                    FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
-                    </Grid>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="1" Classes="Tile" Height="60">
-                    <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Всего запусков" Classes="caption"  />
-                        <TextBlock Grid.Row="1" Text="{Binding SelectedApp?.LaunchCount}" FontSize="15"
-                                   Foreground="#8a59b1" FontWeight="Bold" />
                     </Grid>
                 </Border>
             </Grid>
@@ -140,7 +136,7 @@
                         </Grid>
 
                         <TextBox Grid.Row="1"
-                                 x:Name="EditTextBox"
+                                 Classes="NoteBox"
                                  Text="{Binding SelectedApp?.NoteText}"
                                  IsVisible="{Binding IsEditing}"
                                  TextWrapping="Wrap"

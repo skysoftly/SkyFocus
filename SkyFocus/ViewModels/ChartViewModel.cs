@@ -20,13 +20,13 @@ public partial class ChartViewModel : ViewModelBase
 {
     private readonly AppDbService _appDbService;
     private readonly SettingsService _settingsService;
-    private ObservableCollection<DayUsage> Days { get; set; } = [];
+    private ObservableCollection<DayUsage> _days = [];
 
     [ObservableProperty] private ZoomAndPanMode _zoomMode = ZoomAndPanMode.None;
     [ObservableProperty] private Axis[] _xAxes = [];
     [ObservableProperty] private Axis[] _yAxes = [];
-    public ISeries[] Series { get; private set; } = [];
-    public string[] Labels { get; private set; } = [];
+    [ObservableProperty] ISeries[] _series = [];
+    [ObservableProperty] string[] _labels = [];
 
     private int _appId;
 
@@ -60,6 +60,17 @@ public partial class ChartViewModel : ViewModelBase
         
         string savedPeriodType = _settingsService.Get("SelectedPeriodType", PeriodType.CalendarWeek.ToString());
         SelectedPeriod = Periods.FirstOrDefault(p => p.Type.ToString() == savedPeriodType) ?? Periods[0];
+        
+        
+        
+        
+        YAxes =
+        [
+            new Axis()
+            {
+                MinLimit = 0
+            }
+        ];
     }
 
 
@@ -73,97 +84,75 @@ public partial class ChartViewModel : ViewModelBase
         DateTime startDate;
         DateTime endDate;
         int daysCount;
+        
 
         switch (SelectedPeriod.Type)
         {
             case PeriodType.CalendarWeek:
                 startDate = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
                 endDate = startDate.AddDays(6);
-                daysCount = 7;
                 break;
 
             case PeriodType.Last7Days:
                 startDate = today.AddDays(-6);
                 endDate = today;
-                daysCount = 7;
                 break;
 
             case PeriodType.CalendarMonth:
                 startDate = new DateTime(today.Year, today.Month, 1);
-                endDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-                daysCount = DateTime.DaysInMonth(today.Year, today.Month);
+                endDate = startDate.AddMonths(1).AddDays(-1);
                 break;
 
             case PeriodType.Last30Days:
                 startDate = today.AddDays(-29);
                 endDate = today;
-                daysCount = 30;
                 break;
 
             case PeriodType.AllTime:
-                var allDates = await _appDbService.GetStatsForAppAsync(appId);
-                if (allDates.Any())
-                {
-                    var minDate = allDates.Min();
-                    var maxDate = allDates.Max();
-                    startDate = minDate;
-                    endDate = maxDate;
-                    daysCount = (int)(maxDate - minDate).TotalDays + 1;
-                }
-                else
-                {
-                    startDate = today;
-                    endDate = today;
-                    daysCount = 1;
-                }
-
+                var d = await _appDbService.GetFirstDateForAppAsync(appId);
+                startDate = d;
+                endDate = today;
                 break;
-
+            
             default:
                 startDate = today.AddDays(-6);
                 endDate = today;
-                daysCount = 7;
                 break;
+            
+            
         }
-
+        daysCount = (int)(endDate - startDate).TotalDays + 1;
         var stats = await _appDbService.GetStatsForAppByDatesAsync(appId, startDate, endDate);
-
-        var data = new List<DayUsage>();
-
+        
+        _days.Clear();
         for (int i = 0; i < daysCount; i++)
         {
             var date = startDate.AddDays(i);
             var stat = stats.FirstOrDefault(s => s.Date.Date == date.Date);
-
+        
             double hours = stat?.UsageTimeSeconds / 3600.0 ?? 0;
             hours = Math.Round(hours, 1);
-
-            data.Add(new DayUsage
+        
+            _days.Add(new DayUsage
             {
                 Day = GetDayLabel(date, i, daysCount),
                 Hours = hours
             });
         }
-
-        Days.Clear();
-        foreach (var item in data)
-            Days.Add(item);
-
-        Labels = Days.Select(d => d.Day).ToArray();
-
-
-        Series = new ISeries[]
-        {
+        
+        Labels = _days.Select(d => d.Day).ToArray();
+        
+        Series =
+        [
             new ColumnSeries<double>
             {
-                Values = Days.Select(d => d.Hours).ToArray(),
+                Values = _days.Select(d => d.Hours).ToArray(),
                 Name = "Часы использования",
                 Fill = new LinearGradientPaint(
-                    new[]
-                    {
+                    [
                         SKColor.Parse("#7858a7"),
                         SKColor.Parse("#413159")
-                    },
+                    ],
                     new SKPoint(0, 0),
                     new SKPoint(0, 1)
                 ),
@@ -171,8 +160,8 @@ public partial class ChartViewModel : ViewModelBase
                 Rx = 4,
                 Ry = 4
             }
-        };
-
+        ];
+        
         XAxes =
         [
             new Axis()
@@ -180,29 +169,11 @@ public partial class ChartViewModel : ViewModelBase
                 Labels = Labels,
                 LabelsRotation = 0,
                 MinLimit = -1,
-                MaxLimit = Days.Count   
+                MaxLimit = _days.Count   
             }
         ];
         
-        YAxes =
-        [
-            new Axis()
-            {
-                MinLimit = 0
-            }
-        ];
-
-        if (SelectedPeriod?.Type == PeriodType.AllTime)
-        {
-            ZoomMode = ZoomAndPanMode.X;
-        }
-        else
-        {
-            ZoomMode = ZoomAndPanMode.None;
-        }
-
-        OnPropertyChanged(nameof(Series));
-        OnPropertyChanged(nameof(Labels));
+        ZoomMode = SelectedPeriod?.Type == PeriodType.AllTime ? ZoomAndPanMode.X : ZoomAndPanMode.None;
     }
 
     private string GetDayLabel(DateTime date, int index, int totalDays)
@@ -223,7 +194,7 @@ public partial class ChartViewModel : ViewModelBase
                 _ => date.ToString("ddd")
             };
         }
-        else if (totalDays <= 31)
+        if (totalDays <= 31)
         {
             return date.ToString("dd.MM");
         }

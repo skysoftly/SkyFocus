@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using SkyFocus.Data.Entities;
 
 namespace SkyFocus.Data;
@@ -9,7 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<DailyAppStatEntity> DailyStats => Set<DailyAppStatEntity>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={DbPath.GetPath()}"); 
+        optionsBuilder.UseSqlite( $"Data Source={DbPath.GetPath()}");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

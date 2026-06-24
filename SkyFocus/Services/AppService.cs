@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,11 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using SkyFocus.DTOs;
+using SkyFocus.Views.MessageBox;
+using Bitmap = Avalonia.Media.Imaging.Bitmap;
 
 namespace SkyFocus.Services;
 
@@ -22,23 +27,21 @@ public partial class AppService : ObservableObject
 
     [ObservableProperty] private string _searchText = string.Empty;
 
-    
+
     private DateTime _lastSwitchTime = DateTime.Now;
     private DateTime _currentDate = DateTime.Today;
-    
+
     partial void OnSearchTextChanged(string value)
     {
         Sort();
     }
-    
+
     public AppService(AppDbService appDbService, TrackingService trackingService)
     {
         _appDbService = appDbService;
 
         _ = LoadApps();
 
-        Sort();
-        
         trackingService.RunningAppsChanged += OnRunningAppsChanged;
         trackingService.ActiveAppChanged += OnActiveAppChanged;
     }
@@ -51,29 +54,16 @@ public partial class AppService : ObservableObject
         _apps = new ObservableCollection<AppRowDto>(list);
 
 
-        var tasks = _apps.Select(app =>
+        foreach (var app in _apps)
         {
-            try
-            {
-                var icon = IconService.GetIcon(app.Path);
+            await LoadIconAsync(app);
+        }
 
-                if (icon != null)
-                {
-                    app.Icon = icon;
-                }
-
-                return Task.CompletedTask;
-            }
-            catch (Exception exception)
-            {
-                return Task.FromException(exception);
-            }
-        });
-
-        await Task.WhenAll(tasks);
+        Sort();
     }
-    
-    public void Sort()
+
+
+    private void Sort()
     {
         var query = _apps.AsEnumerable();
 
@@ -93,7 +83,7 @@ public partial class AppService : ObservableObject
         FilteredApps = new ObservableCollection<AppRowDto>(sorted);
     }
 
-    
+
     private void OnRunningAppsChanged(HashSet<string> running)
     {
         Dispatcher.UIThread.Post(() =>
@@ -105,30 +95,23 @@ public partial class AppService : ObservableObject
                 if (isRunning != app.IsRunning)
                 {
                     app.IsRunning = isRunning;
-    
-                    if (app.IsRunning)
-                    {
-                        app.LaunchCount += 1;
-                        _ = _appDbService.UpdateAppAsync(app);
-                    }
-    
+
                     isUpdate = true;
                 }
-    
             }
-    
+
             if (isUpdate)
                 Sort();
         });
     }
-    
+
     private void OnActiveAppChanged(string? lastProcessName, string processName)
     {
         var now = DateTime.Now;
         var duration = now - _lastSwitchTime;
         var secondsToAdd = (int)duration.TotalSeconds;
         var today = DateTime.Today;
-    
+
         Dispatcher.UIThread.Post(() =>
         {
             if (_currentDate != today)
@@ -139,20 +122,20 @@ public partial class AppService : ObservableObject
                     app.UsageTimeSeconds = 0;
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(lastProcessName) && duration.TotalSeconds >= 1)
             {
                 var app = _apps.FirstOrDefault(a => a.ProcessName == lastProcessName);
                 if (app != null)
                 {
                     _ = _appDbService.AddUsageTimeAsync(app.Id, secondsToAdd);
-    
+
                     app.UsageTimeSeconds += secondsToAdd;
                     Sort();
                 }
             }
-    
-    
+
+
             foreach (var app in _apps)
             {
                 app.IsActive = app.ProcessName == processName;
@@ -160,46 +143,37 @@ public partial class AppService : ObservableObject
         });
         _lastSwitchTime = now;
     }
-    
-    
+
+
     public async Task AddApp()
     {
-        var files = await App.MainWindow.StorageProvider.OpenFilePickerAsync(
-            new FilePickerOpenOptions
-            {
-                Title = "Выберите приложение",
-                AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("Исполняемые файлы")
-                    {
-                        Patterns = new[] { "*.exe", "*.url" }
-                    }
-                }
-            });
+        var filePath = await FilePickerService.PickExeFileAsync();
+        if (filePath == null) return;
+        
+        
+        var existingByPath = await _appDbService.GetByPathAsync(filePath);
+        if (existingByPath != null)
+        {
+            var dialog = new InfoDialog("Это приложение уже добавлено!");
+            await dialog.ShowDialog(App.MainWindow!);
 
-        if (files.Count == 0)
             return;
-
-        var filePath = files[0].Path.LocalPath;
-
+        }
+        
 
         var app = new AppRowDto
         {
             Name = Path.GetFileNameWithoutExtension(filePath),
             Path = filePath,
-            ProcessName = Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant(),
+            ProcessName = Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant()
         };
 
         await _appDbService.AddAsync(app);
-
+        
+        await LoadIconAsync(app);
+        
         _apps.Add(app);
         Sort();
-
-        var icon = IconService.GetIcon(filePath);
-
-        if (icon != null)
-            app.Icon = icon;
     }
 
     public async Task ToggleFavorite(AppRowDto app)
@@ -211,7 +185,43 @@ public partial class AppService : ObservableObject
     public async Task Delete(AppRowDto selectedApp)
     {
         _apps.Remove(selectedApp);
+        FilteredApps.Remove(selectedApp);
+        SelectedApp = null;
         await _appDbService.RemoveAppAsync(selectedApp.Id);
     }
-}
+    
+    
+    private async Task LoadIconAsync(AppRowDto app)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(app.IconPath) && File.Exists(app.IconPath))
+            {
+                app.Icon = new Bitmap(app.IconPath);
+                return;
+            }
 
+            var icon = IconService.GetIcon(app.Path);
+            if (icon == null) return;
+
+            var iconsDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "SkyFocus",
+                "Icons"
+            );
+            Directory.CreateDirectory(iconsDir);
+
+            var iconPath = Path.Combine(iconsDir, $"{app.Id}.png");
+            
+            icon.Save(iconPath);
+            
+            app.Icon = new Bitmap(iconPath);
+            app.IconPath = iconPath;
+            await _appDbService.UpdateAppAsync(app);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Icon error for {app.Name}: {ex.Message}");
+        }
+    }
+}

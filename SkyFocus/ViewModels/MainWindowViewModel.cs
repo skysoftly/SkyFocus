@@ -12,20 +12,37 @@ using SkyFocus.Utils;
 
 namespace SkyFocus.ViewModels;
 
-public partial class MainWindowViewModel(
-    AppsListViewModel appsList,
-    AppInfoViewModel appInfo,
-    GeneralStatisticsViewModel generalStatistics,
-    TrackingService tracking,
-    OverlayViewModel overlay,
-    WindowBarViewModel windowBar)
-    : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase
 {
-    public WindowBarViewModel WindowBar { get; } = windowBar;
-    public AppsListViewModel AppsList { get; } = appsList;
-    public AppInfoViewModel AppInfo { get; } = appInfo;
-    public OverlayViewModel Overlay { get; } = overlay;
-    public GeneralStatisticsViewModel GeneralStatistics { get; } = generalStatistics;
+    public TrackingService TrackingService { get; }
+    public WindowBarViewModel WindowBar { get; }
 
-    public TrackingService TrackingService { get; } = tracking;
+
+    [ObservableProperty] private ViewModelBase _currentPage;
+
+    private MainPageViewModel _mainPage;
+    private ChartPageViewModel _chartPage;
+
+
+    public MainWindowViewModel(MainPageViewModel mainPageViewModel, ChartPageViewModel chartPageViewModel, TrackingService tracking, WindowBarViewModel windowBar)
+    {
+        _mainPage = mainPageViewModel;
+        _chartPage = chartPageViewModel;
+        TrackingService = tracking;
+        WindowBar = windowBar;
+        
+        CurrentPage = _mainPage;
+    }
+
+    [RelayCommand]
+    private void SelectMainPage()
+    {
+        CurrentPage = _mainPage;
+    }
+
+    [RelayCommand]
+    private void SelectChartPage()
+    {
+        CurrentPage = _chartPage;
+    }
 }
