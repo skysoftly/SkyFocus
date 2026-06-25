@@ -43,7 +43,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Classes="Tile">
-
+                <ContentControl Content="{Binding TopAppsViewModel}" />
             </Border>
             <Border Grid.Column="1" Classes="Tile">
                 <ContentControl Content="{Binding GeneralStatistics}" />

@@ -147,32 +147,34 @@ public partial class AppService : ObservableObject
 
     public async Task AddApp()
     {
-        var filePath = await FilePickerService.PickExeFileAsync();
-        if (filePath == null) return;
-        
-        
-        var existingByPath = await _appDbService.GetByPathAsync(filePath);
-        if (existingByPath != null)
-        {
-            var dialog = new InfoDialog("Это приложение уже добавлено!");
-            await dialog.ShowDialog(App.MainWindow!);
+        var filePaths = await FilePickerService.PickExeFilesAsync();
+        if (filePaths == null || filePaths.Count == 0) return;
 
-            return;
+        foreach (var filePath in filePaths)
+        {
+            var existingByPath = await _appDbService.GetByPathAsync(filePath);
+            if (existingByPath != null)
+            {
+                var dialog = new InfoDialog($"{Path.GetFileNameWithoutExtension(filePath)} уже добавлен!");
+                await dialog.ShowDialog(App.MainWindow!);
+
+                continue;
+            }
+        
+
+            var app = new AppRowDto
+            {
+                Name = Path.GetFileNameWithoutExtension(filePath),
+                Path = filePath,
+                ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath))
+            };
+
+            await _appDbService.AddAsync(app);
+        
+            await LoadIconAsync(app);
+        
+            _apps.Add(app);
         }
-        
-
-        var app = new AppRowDto
-        {
-            Name = Path.GetFileNameWithoutExtension(filePath),
-            Path = filePath,
-            ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath))
-        };
-
-        await _appDbService.AddAsync(app);
-        
-        await LoadIconAsync(app);
-        
-        _apps.Add(app);
         Sort();
     }
 
@@ -254,5 +256,11 @@ public partial class AppService : ObservableObject
         
         // Загружаем заново из exe
         await LoadIconAsync(SelectedApp);
+    }
+    
+    public async Task<List<AppRowDto>> GetTopAppsAsync(int count = 5)
+    {
+        var apps = await _appDbService.LoadAppsWithTodayStatsAsync();
+        return apps.OrderByDescending(a => a.UsageTimeSeconds).Take(count).ToList();
     }
 }

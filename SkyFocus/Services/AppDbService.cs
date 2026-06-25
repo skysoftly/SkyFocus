@@ -183,4 +183,38 @@ public class AppDbService
             IconPath = entity.IconPath
         };
     }
+    
+    public async Task<List<AppRowDto>> GetTopAppsAsync(int count, DateTime startDate, DateTime endDate)
+    {
+        using var db = _dbFactory.CreateDbContext();
+    
+        var stats = await db.DailyStats
+            .Where(s => s.Date >= startDate && s.Date <= endDate)
+            .GroupBy(s => s.AppId)
+            .Select(g => new
+            {
+                AppId = g.Key,
+                TotalSeconds = g.Sum(s => s.UsageTimeSeconds)
+            })
+            .OrderByDescending(x => x.TotalSeconds)
+            .Take(count)
+            .ToListAsync();
+    
+        var appIds = stats.Select(x => x.AppId).ToList();
+        var apps = await db.Apps
+            .Where(a => appIds.Contains(a.Id))
+            .ToListAsync();
+    
+        return apps.Select(a => new AppRowDto
+        {
+            Id = a.Id,
+            Name = a.Name,
+            Path = a.Path,
+            ProcessName = a.ProcessName,
+            IsFavorite = a.IsFavorite,
+            NoteText = a.NoteText,
+            IconPath = a.IconPath,
+            UsageTimeSeconds = stats.First(s => s.AppId == a.Id).TotalSeconds
+        }).OrderByDescending(a => a.UsageTimeSeconds).ToList();
+    }
 }

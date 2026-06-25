@@ -211,6 +211,7 @@ public class PeriodOption
 
 public enum PeriodType
 {
+    Today,
     CalendarWeek,
     Last7Days,
     CalendarMonth,

@@ -186,6 +186,4 @@
         <Setter Property="Foreground" Value="#AB80D6" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
-    
-    
 </Styles>

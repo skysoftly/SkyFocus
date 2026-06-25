@@ -54,5 +54,6 @@ public class TrayService
     {
         App.MainWindow?.Show();
         App.MainWindow?.Activate();
+        App.MainWindow?.Focus();
     }
 }

@@ -104,7 +104,7 @@ public partial class TrackingService : ObservableObject
         {
             try
             {
-                names.Add(p.ProcessName);
+                names.Add(CleanName(p.ProcessName));
             }
             catch
             {

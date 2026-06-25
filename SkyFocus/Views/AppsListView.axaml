@@ -44,9 +44,9 @@
 
                         <Image Grid.Column="1" Source="{Binding Icon}" Classes="app-icon" />
 
-                        <StackPanel Grid.Column="2" Classes="app-info">
-                            <TextBlock Classes="app-name" Text="{Binding Name}" />
-                            <TextBlock Classes="app-path" Text="{Binding Path}" />
+                        <StackPanel Grid.Column="2" Classes="app-info" VerticalAlignment="Center">
+                            <TextBlock Classes="app-name h5" Text="{Binding Name}"/>
+                            <!-- <TextBlock Classes="app-path" Text="{Binding Path}" /> -->
                         </StackPanel>
 
                         <StackPanel Grid.Column="3" Classes="status-panel">

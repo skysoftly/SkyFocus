@@ -131,6 +131,7 @@ public partial class App : Application
         services.AddScoped<GeneralStatisticsViewModel>();
         services.AddScoped<ChartPageViewModel>();
         services.AddScoped<MainPageViewModel>();
+        services.AddScoped<TopAppsViewModel>();
 
         // Окна
         services.AddSingleton<MainWindow>(sp =>
@@ -177,91 +178,5 @@ public partial class App : Application
             return new GridLength(pixel, GridUnitType.Pixel);
 
         return new GridLength(1, GridUnitType.Star);
-    }
-
-    public async Task GenerateTestDataWithTodayAsync()
-    {
-        var random = new Random();
-        var appIds = new[] { 2, 3, 7 };
-        var startDate = new DateTime(2025, 1, 1);
-        var endDate = DateTime.Today; // 2026-06-24 - автоматически
-
-        using var db = new AppDbContext();
-
-        // Очищаем старые данные (опционально)
-        db.DailyStats.RemoveRange(db.DailyStats);
-        await db.SaveChangesAsync();
-
-        var stats = new List<DailyAppStatEntity>();
-
-        for (var date = startDate; date <= endDate; date = date.AddDays(1))
-        {
-            // Пропускаем случайные дни (30% дней пропускаем)
-            if (random.NextDouble() < 0.3 && date != endDate)
-                continue;
-
-            foreach (var appId in appIds)
-            {
-                // Иногда приложение не использовалось в этот день (20% пропуск)
-                if (random.NextDouble() < 0.2)
-                    continue;
-
-                // Для сегодняшнего дня - особые значения
-                int maxSeconds;
-                if (date == DateTime.Today) // Сегодня 2026-06-24
-                {
-                    // Для сегодня делаем реалистичные значения
-                    maxSeconds = random.Next(3600, 21600);
-                    // if (appId == 2)
-                    //     maxSeconds = random.Next(3600, 21600); // 1-6 часов (рабочее приложение)
-                    // else if (appId == 3)
-                    //     maxSeconds = random.Next(600, 7200); // 10 мин - 2 часа
-                    // else
-                    //     maxSeconds = random.Next(300, 1800); // 5-30 минут
-                }
-                else
-                {
-                    // Обычная генерация для прошлых дней
-                    double chance = random.NextDouble();
-
-                    if (chance < 0.1)
-                        maxSeconds = random.Next(43200, 86400);
-                    else if (chance < 0.3)
-                        maxSeconds = random.Next(14400, 43200);
-                    else if (chance < 0.6)
-                        maxSeconds = random.Next(3600, 14400);
-                    else if (chance < 0.85)
-                        maxSeconds = random.Next(600, 3600);
-                    else
-                        maxSeconds = random.Next(0, 600);
-                }
-
-                var usageTime = random.Next(0, maxSeconds);
-
-                // Иногда большие значения для реалистичности (только не для сегодня)
-                if (date != DateTime.Today && random.NextDouble() < 0.05)
-                    usageTime = random.Next(72000, 86400);
-
-                stats.Add(new DailyAppStatEntity
-                {
-                    AppId = appId,
-                    Date = date,
-                    UsageTimeSeconds = usageTime
-                });
-            }
-        }
-
-        // Добавляем пакетами по 1000 записей
-        int batchSize = 1000;
-        for (int i = 0; i < stats.Count; i += batchSize)
-        {
-            var batch = stats.Skip(i).Take(batchSize);
-            db.DailyStats.AddRange(batch);
-            await db.SaveChangesAsync();
-            Console.WriteLine($"Добавлено записей: {i + batch.Count()}/{stats.Count}");
-        }
-
-        Console.WriteLine($"Всего добавлено: {stats.Count} записей");
-        Console.WriteLine($"Данные за сегодня ({DateTime.Today:yyyy-MM-dd}) включены!");
     }
 }

@@ -156,11 +156,13 @@
                             <Button Grid.Column="1" Content="Редактировать" Padding="0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
+                                    Classes="transparent-btn"
                                     Command="{Binding EditCommand}"
                                     IsVisible="{Binding !IsEditing}" />
                             <Button Grid.Column="1" Content="Сохранить" Padding="0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
+                                    Classes="transparent-btn"
                                     IsVisible="{Binding IsEditing}" />
                         </Grid>
 

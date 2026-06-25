@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 
@@ -60,6 +61,46 @@ public static class FilePickerService
                 .ConfigureAwait(false);
 
             return files.Count > 0 ? files[0].Path.LocalPath : null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+            return null;
+        }
+    }
+
+    public static async Task<List<string>?> PickExeFilesAsync()
+    {
+        try
+        {
+            await Task.Delay(100);
+            
+            var files = await App.MainWindow!.StorageProvider
+                .OpenFilePickerAsync(
+                    new FilePickerOpenOptions
+                    {
+                        Title = "Выберите приложения",
+                        AllowMultiple = true,
+                        FileTypeFilter = new[]
+                        {
+                            new FilePickerFileType("Исполняемые файлы")
+                            {
+                                Patterns = new[] { "*.exe", "*.url" }
+                            }
+                        }
+                    })
+                .ConfigureAwait(false);
+
+            if (files.Count < 0) return null;
+            
+            var filePaths = new List<string>();
+
+            foreach (var filePath in files)
+            {
+                filePaths.Add(filePath.Path.LocalPath);
+            }
+            
+            return filePaths;
         }
         catch (Exception ex)
         {

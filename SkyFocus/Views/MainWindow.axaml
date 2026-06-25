@@ -26,15 +26,15 @@
                 <ContentControl Content="{Binding WindowBar}" />
                 <Grid Grid.Row="1" 
                       ColumnDefinitions="50 *">
-                    <StackPanel Orientation="Vertical" Spacing="8">
-                        <RadioButton GroupName="ViewMode"
-                                     IsChecked="True"
-                                     Command="{Binding SelectMainPageCommand}"
-                                     Content="1"/>
-    
-                        <RadioButton GroupName="ViewMode"
-                                     Command="{Binding SelectChartPageCommand}"
-                                     Content="2"/>
+                    <StackPanel Orientation="Vertical" Spacing="5" Margin="5 0">
+                        <Button Classes="primary" Width="40" Height="40"
+                                Command="{Binding SelectMainPageCommand}">
+                            <Image Source="/Assets/Icons/home.png"/>
+                        </Button>
+                        <Button Classes="primary" Width="40" Height="40"
+                                Command="{Binding SelectChartPageCommand}">
+                            <Image Source="/Assets/Icons/graph.png"/>
+                        </Button>
                     </StackPanel>
                     
                     
