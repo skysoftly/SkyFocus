@@ -39,5 +39,9 @@
       <Compile Update="Views\GeneralStatisticsView.axaml.cs">
         <DependentUpon>GeneralStatisticsView.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\MessageBox\TextDialog.axaml.cs">
+        <DependentUpon>TextDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

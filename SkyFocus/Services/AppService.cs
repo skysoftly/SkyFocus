@@ -182,12 +182,19 @@ public partial class AppService : ObservableObject
         await _appDbService.UpdateAppAsync(app);
     }
 
-    public async Task Delete(AppRowDto selectedApp)
+    public async Task<bool> Delete(AppRowDto selectedApp)
     {
+        var dialog = new ConfirmDialog("Вы уверены?");
+        var ok = await dialog.ShowDialog<bool>(App.MainWindow!);
+
+        if (!ok) return false;
+        
         _apps.Remove(selectedApp);
         FilteredApps.Remove(selectedApp);
         SelectedApp = null;
         await _appDbService.RemoveAppAsync(selectedApp.Id);
+        
+        return true;
     }
     
     
@@ -195,33 +202,57 @@ public partial class AppService : ObservableObject
     {
         try
         {
-            if (!string.IsNullOrEmpty(app.IconPath) && File.Exists(app.IconPath))
+            // Используем новый сервис
+            var icon = IconService.GetIconForApp(app.Id, app.Path);
+            if (icon != null)
             {
-                app.Icon = new Bitmap(app.IconPath);
-                return;
+                app.Icon = icon;
+                app.IconPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "SkyFocus",
+                    "Icons",
+                    $"{app.Id}.png"
+                );
+                await _appDbService.UpdateAppAsync(app);
             }
-
-            var icon = IconService.GetIcon(app.Path);
-            if (icon == null) return;
-
-            var iconsDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkyFocus",
-                "Icons"
-            );
-            Directory.CreateDirectory(iconsDir);
-
-            var iconPath = Path.Combine(iconsDir, $"{app.Id}.png");
-            
-            icon.Save(iconPath);
-            
-            app.Icon = new Bitmap(iconPath);
-            app.IconPath = iconPath;
-            await _appDbService.UpdateAppAsync(app);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Icon error for {app.Name}: {ex.Message}");
         }
+    }
+    
+    
+    public async Task EditIcon()
+    {
+        if (SelectedApp == null) return;
+
+        var path = await FilePickerService.PickImageFileAsync();
+        if (path == null) return;
+
+        // Устанавливаем кастомную иконку
+        var icon = IconService.SetCustomIcon(SelectedApp.Id, path);
+        if (icon != null)
+        {
+            SelectedApp.Icon = icon;
+            SelectedApp.IconPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "SkyFocus",
+                "Icons",
+                $"{SelectedApp.Id}.png"
+            );
+            await _appDbService.UpdateAppAsync(SelectedApp);
+        }
+    }
+
+    public async Task ResetIcon()
+    {
+        if (SelectedApp == null) return;
+
+        // Удаляем кастомную иконку
+        IconService.DeleteIcon(SelectedApp.Id);
+        
+        // Загружаем заново из exe
+        await LoadIconAsync(SelectedApp);
     }
 }

@@ -26,8 +26,9 @@
             </Button>
             <TextBox Grid.Column="1" Margin="5 0"
                      PlaceholderText="🔍︎ Поиск приложений..."
+                     Height="35"
                      Text="{Binding AppService.SearchText, Mode=TwoWay}"
-                     Classes="h5" />
+                     Classes="textBox" />
         </Grid>
         <Border Grid.Row="1" Classes="Separator" />
         <ListBox Grid.Row="2"

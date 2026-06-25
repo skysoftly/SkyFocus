@@ -3,23 +3,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
-        x:Class="SkyFocus.Views.MessageBox.InfoDialog"
-        Title="InfoDialog"
+        x:Class="SkyFocus.Views.MessageBox.TextDialog"
+        Title="TextDialog"
         Width="300" Height="150"
         WindowDecorations="None"
         WindowStartupLocation="CenterOwner"
         Background="Transparent">
     <Border Classes="DialogPanel">
-        <Grid Margin="20" RowDefinitions="Auto Auto" RowSpacing="10" VerticalAlignment="Center">
-            <TextBlock Grid.Row="0" x:Name="Title" 
-                       Text="Внимание!" 
-                       MaxLines="3"
-                       Classes="h4" HorizontalAlignment="Center" 
-                       TextWrapping="Wrap"
-                       TextAlignment="Center"
-                       TextTrimming="CharacterEllipsis"/>
-            <Grid Grid.Row="1" ColumnDefinitions="*" HorizontalAlignment="Center" ColumnSpacing="10">
+        <Grid Margin="20" RowDefinitions="Auto * Auto" RowSpacing="10">
+            <TextBlock Grid.Row="0" x:Name="Title" Text="Введите новое имя!" Classes="h4" HorizontalAlignment="Center" />
+            <TextBox Grid.Row="1" x:Name="TextBox" MaxLength="250" Classes="textBox"/>
+            <Grid Grid.Row="2" ColumnDefinitions="* *" HorizontalAlignment="Center" ColumnSpacing="10">
                 <Button Grid.Column="0" Content="Подтвердить" Click="OnYesClick" HorizontalAlignment="Stretch" Width="120" Classes="primary" HorizontalContentAlignment="Center"/>
+                <Button Grid.Column="1" Content="Отменить" Click="OnNoClick" Width="120" Classes="primary" HorizontalContentAlignment="Center"/>
             </Grid>
         </Grid>
     </Border>

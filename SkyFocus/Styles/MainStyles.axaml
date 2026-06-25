@@ -1,174 +1,45 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:SkyFocus.Controls">
+        xmlns:controls="using:SkyFocus.Controls">
+    
     <Design.PreviewWith>
-        <Grid Width="1920" Height="1080">
-            <Grid>
-                <Image Source="/Assets/bg.jpg" Stretch="UniformToFill" />
-                <Border Classes="Overlay"
-                        Margin="0,0,8,0">
-                    <Grid RowDefinitions="40 * 40">
-                        <Grid Grid.Row="0" ColumnDefinitions="50 * Auto"
-                              Background="#00000000">
-                            <Image Grid.Column="0" Source="/Assets/icon.png" Margin="5" />
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="SkyFocus" />
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="2"
-                                        Orientation="Horizontal"
-                                        Spacing="5"
-                                        Margin="5">
-
-                                <Button Classes="window">
-                                    <Grid>
-                                        <Image Source="/Assets/Icons/minus.png" />
-                                    </Grid>
-                                </Button>
-                                <Button Classes="window">
-                                    <Grid>
-                                        <Image Source="/Assets/Icons/square.png" IsVisible="True" />
-                                        <Image Source="/Assets/Icons/double_square.png" IsVisible="False" />
-                                    </Grid>
-                                </Button>
-                                <Button Classes="window close">
-                                    <Grid>
-                                        <Image Source="/Assets/Icons/cross.png" />
-                                    </Grid>
-                                </Button>
-
-                            </StackPanel>
-                        </Grid>
-
-                        <Grid Grid.Row="1" RowDefinitions="65 *"
-                              ColumnDefinitions="50 *">
-
-                            <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"
-                                        Orientation="Horizontal"
-                                        Spacing="10">
-                                <Button Classes="primary" Width="120" Height="35"
-                                        HorizontalContentAlignment="Center">
-                                    <StackPanel Orientation="Horizontal"
-                                                Spacing="5"
-                                                Height="14"
-                                                Margin="0 0 10 0">
-                                        <Image Source="/Assets/Icons/plus.png" />
-                                        <TextBlock Text="Добавить" VerticalAlignment="Center" Classes="h5" />
-                                    </StackPanel>
-                                </Button>
-                                <TextBox PlaceholderText="🔍︎ Поиск приложений..." Width="240" Classes="h5"></TextBox>
-                            </StackPanel>
-
-                            <Grid Grid.Column="1" Grid.Row="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="2*" MinHeight="160" />
-                                    <RowDefinition Height="8" />
-                                    <RowDefinition Height="*" MinHeight="160" />
-                                </Grid.RowDefinitions>
-
-                                <Grid Grid.Row="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" MinWidth="240" />
-                                        <ColumnDefinition Width="8" />
-                                        <ColumnDefinition Width="2*" MinWidth="240" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" Classes="Tile">
-
-                                    </Border>
-                                    <Border Grid.Column="2" Classes="Tile">
-
-                                    </Border>
-
-                                    <GridSplitter Grid.Column="1"
-                                                  Classes="TileSplitter VerticalTileSplitter"
-                                                  ResizeDirection="Columns" />
-                                </Grid>
-
-                                <GridSplitter Grid.Row="1"
-                                              Classes="TileSplitter HorizontalTileSplitter"
-                                              ResizeDirection="Rows" />
-
-                                <Grid Grid.Row="2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" MinWidth="240" />
-                                        <ColumnDefinition Width="8" />
-                                        <ColumnDefinition Width="*" MinWidth="240" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" Classes="Tile">
-
-                                    </Border>
-                                    <Border Grid.Column="2" Classes="Tile">
-
-                                    </Border>
-
-                                    <GridSplitter Grid.Column="1"
-                                                  Classes="TileSplitter VerticalTileSplitter"
-                                                  ResizeDirection="Columns" />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Row="2"
-                              VerticalAlignment="Center" Margin="5"
-                              ColumnDefinitions="Auto *"
-                              ColumnSpacing="10">
-                            <Border Classes="Tile" Padding="10 5" VerticalAlignment="Center" Width="170">
-                                <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-                                    <controls:StateTextBlock ActiveText="●" InactiveText="●" Classes="caption_color"
-                                                             IsChecked="True" />
-                                    <controls:StateTextBlock ActiveText="Отслеживание активно"
-                                                             InactiveText="Отслеживание не активно" Classes="caption"
-                                                             IsChecked="True" />
-                                </StackPanel>
-                            </Border>
-                            <Grid Grid.Column="1"
-                                  ColumnDefinitions="* *"
-                                  Margin="10 5"
-                                  VerticalAlignment="Center">
-                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="⟳" Classes="caption" FontSize="16" Margin="0 -6 0 0"
-                                               VerticalAlignment="Center" />
-                                    <TextBlock Text="Синхронизация: 2 мин. назад" Classes="caption"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20"
-                                            HorizontalAlignment="Right">
-
-
-                                    <TextBlock Text="v0.1" Classes="caption"
-                                               VerticalAlignment="Center" />
-                                    <TextBlock Text="⫶☰" Classes="caption" FontSize="20" VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Grid>
-
-                        </Grid>
+        <Border Width="300">
+            <Border Classes="DialogPanel">
+                <Grid Margin="20" RowDefinitions="Auto * Auto Auto" RowSpacing="10">
+                    <TextBlock Grid.Row="0" x:Name="Title" Text="Введите новое имя!" Classes="h4" HorizontalAlignment="Center" />
+                    <TextBox Grid.Row="1" x:Name="TextBox" MaxLength="250" Classes="textBox"/>
+                    <Grid Grid.Row="2" ColumnDefinitions="* *" HorizontalAlignment="Center" ColumnSpacing="10">
+                        <Button Grid.Column="0" Content="Подтвердить" HorizontalAlignment="Stretch" Width="120" Classes="primary" HorizontalContentAlignment="Center"/>
+                        <Button Grid.Column="1" Content="Отменить" Width="120" Classes="primary" HorizontalContentAlignment="Center"/>
                     </Grid>
-                </Border>
-            </Grid>
-        </Grid>
+                    
+                    <ComboBox Grid.Row="3" HorizontalAlignment="Right" ItemsSource="***"
+                              Padding="10,6"
+                              CornerRadius="6"/>
+                </Grid>
+            </Border>
+        </Border>
     </Design.PreviewWith>
-
-    <!-- Add Styles Here -->
-
-
+    
     <Style Selector="Border.Overlay">
-        <Setter Property="Background" Value="#60000000" />
+        <Setter Property="Background" Value="#50000000" />
     </Style>
-
+    
+    
     <Style Selector="Border.Tile">
         <Setter Property="Background" Value="#a0000000" />
         <Setter Property="CornerRadius" Value="10" />
-        <Setter Property="BorderBrush" Value="#3c1a42" />
+        <Setter Property="BorderBrush" Value="#270F2C" />
         <Setter Property="BorderThickness" Value="1.5" />
     </Style>
     
-    
-    <Style Selector="Border.Separator">
-        <Setter Property="Background" Value="#3c1a42" />
+    <Style Selector="Border.TileInto">
+        <Setter Property="Background" Value="#30000000" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="BorderBrush" Value="#a03c1a42" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
-
+    
     <Style Selector="GridSplitter.TileSplitter">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Background" Value="Transparent" />
@@ -177,63 +48,70 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
-
+    
     <Style Selector="GridSplitter.VerticalTileSplitter">
         <Setter Property="Cursor" Value="SizeWestEast" />
         <Setter Property="Margin" Value="-4,0,4,0" />
     </Style>
-
+    
     <Style Selector="GridSplitter.HorizontalTileSplitter">
         <Setter Property="Cursor" Value="SizeNorthSouth" />
         <Setter Property="Margin" Value="0,-4,0,4" />
     </Style>
-
-    <!-- Текст блоки -->
-
+    
+    
+    <Style Selector="TextBlock.caption-TextBlock">
+        <Setter Property="Cursor" Value="SizeNorthSouth" />
+        <Setter Property="Margin" Value="0,-4,0,4" />
+    </Style>
+    
+    
+    
+    
     <Style Selector="TextBlock.h1">
         <Setter Property="FontSize" Value="40" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="LetterSpacing" Value="1" />
         <Setter Property="Foreground" Value="White" />
     </Style>
-
+    
     <Style Selector="TextBlock.h2">
         <Setter Property="FontSize" Value="32" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="White" />
     </Style>
-
+    
     <Style Selector="TextBlock.h3">
         <Setter Property="FontSize" Value="26" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="#E8E8E8" />
     </Style>
-
+    
     <Style Selector="TextBlock.h4">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="Foreground" Value="#DDDDDD" />
     </Style>
-
+    
     <Style Selector="TextBlock.h5">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="Foreground" Value="#DDDDDD" />
     </Style>
-
-
+    
+    
     <Style Selector="TextBlock.caption">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#66FFFFFF" />
     </Style>
-
-
+    
+    
     <!-- серый маленький текст у StateTextBlock -->
     <Style Selector="controls|StateTextBlock.caption">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#66FFFFFF" />
     </Style>
-
+    
     <Style Selector="controls|StateTextBlock.caption_green">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#66FFFFFF" />
@@ -249,31 +127,145 @@
             <Setter Property="Foreground" Value="#4CAF50" />
         </Style>
     </Style>
-
-
-    <!-- главная фиолетовая кнопка -->
-    <Style Selector="Button.primary">
-        <Setter Property="Background" Value="#FF6B3596" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="Padding" Value="14,4" />
+    
+    
+    <Style Selector="TextBox.textBox">
+        <Setter Property="Background" Value="#00000000" />
         <Setter Property="BorderThickness" Value="0" />
-
-        <Style Selector="^:pointerover /template/ContentPresenter">
-            <Setter Property="Background" Value="#9252c7" />
+        <Setter Property="CornerRadius" Value="10" />
+        
+        <Style Selector="^ /template/ Border">
+            <Setter Property="BorderBrush" Value="#3c1a42" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
         </Style>
-        <Style Selector="^:pressed /template/ContentPresenter">
-            <Setter Property="Background" Value="#592880" />
+        
+        
+        <Style Selector="^:pointerover /template/ Border">
+            <Setter Property="BorderBrush" Value="#56265f" />
+            <Setter Property="Background" Value="#10000000" />
+        </Style>
+
+        <Style Selector="^:focus-within /template/ Border">
+            <Setter Property="BorderBrush" Value="#56265f" />
+            <Setter Property="Background" Value="#20000000" />
         </Style>
     </Style>
+    
+    
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="#00000000" />
+        <Setter Property="BorderBrush" Value="#3c1a42" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="10" />
+        
+        <Style Selector="^:pointerover /template/ Border#Background">
+            <Setter Property="BorderBrush" Value="#56265f" />
+            <Setter Property="Background" Value="#10000000" />
+        </Style>
 
+        <Style Selector="^:dropdownopen /template/ Border#Background">
+            <Setter Property="BorderBrush" Value="#56265f" />
+            <Setter Property="Background" Value="#20000000" />
+        </Style>
+        
+        <Style Selector="^:dropdownopen /template/ Popup Border#PopupBorder">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Background" Value="#190e1a" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="BorderBrush" Value="#3c1a42" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        
+        <Style Selector="^:dropdownopen ComboBoxItem">
+            <Setter Property="Margin" Value="5 2" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            
+            <Setter Property="FocusAdorner" Value="{x:Null}"/>
+        
+            <Style Selector="^:pointerover /template/ContentPresenter">
+                <Setter Property="Background" Value="#405a2a63" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style Selector="^:focus /template/ContentPresenter">
+                <Setter Property="Background" Value="#405a2a63" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style Selector="^:selected /template/ContentPresenter">
+                <Setter Property="Background" Value="#190e1a" />
+                <Setter Property="BorderBrush" Value="#3c1a42" />
+                <Setter Property="BorderThickness" Value="1" /> 
+            </Style>
+        </Style>
+        
+    </Style>
+
+
+    
+    
+    <Style Selector="Border.DialogPanel">
+        <Setter Property="Background" Value="#190e1a" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="BorderBrush" Value="#3c1a42" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    
+    
+    <!-- flyout -->
+    
+    <Style Selector="MenuFlyoutPresenter">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Background" Value="#190e1a" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="BorderBrush" Value="#3c1a42" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    
+    <Style Selector="MenuItem">
+        <Setter Property="Margin" Value="5 2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="2" />
+        
+        <Setter Property="FocusAdorner" Value="{x:Null}"/>
+        
+        <Style Selector="^:pointerover /template/Border">
+            <Setter Property="Background" Value="#405a2a63" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        
+        
+        <Style Selector="^:focus /template/Border">
+            <Setter Property="Background" Value="#405a2a63" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        
+        <Style Selector="^:open /template/Border">
+            <Setter Property="Background" Value="#190e1a" />
+            <Setter Property="BorderBrush" Value="#3c1a42" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        
+    </Style>
+    
+    
+    
     <!-- Верхняя панель -->
     <!-- Кнопки управления окном -->
-
+    
     <Style Selector="Button.window">
         <Setter Property="Padding" Value="5" />
         <Setter Property="Background" Value="Transparent" />
-
+    
         <Style Selector="^:pointerover /template/ContentPresenter">
             <Setter Property="Background" Value="#50aaaaaa" />
         </Style>
@@ -281,9 +273,9 @@
             <Setter Property="Background" Value="#70aaaaaa" />
         </Style>
     </Style>
-
+    
     <Style Selector="Button.close">
-
+    
         <Style Selector="^:pointerover /template/ContentPresenter">
             <Setter Property="Background" Value="#d7424d" />
         </Style>
@@ -292,15 +284,4 @@
         </Style>
     </Style>
     
-    <!-- <Style Selector="Panel.close"> -->
-    <!-- -->
-    <!--     <Style Selector="^:pointerover /template/ContentPresenter"> -->
-    <!--         <Setter Property="Background" Value="#d7424d" /> -->
-    <!--     </Style> -->
-    <!--     <Style Selector="^:pressed /template/ContentPresenter"> -->
-    <!--         <Setter Property="Background" Value="#8b272e" /> -->
-    <!--     </Style> -->
-    <!-- </Style> -->
-
-
 </Styles>

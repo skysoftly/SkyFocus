@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkyFocus.DTOs;
 using SkyFocus.Services;
+using SkyFocus.Views.MessageBox;
 
 namespace SkyFocus.ViewModels;
 
@@ -98,9 +102,8 @@ public partial class AppInfoViewModel : ViewModelBase
         }
     }
 
-
     [RelayCommand]
-    private void ToggleApp()
+    private async Task ToggleApp()
     {
         if (SelectedApp == null) return;
 
@@ -114,7 +117,8 @@ public partial class AppInfoViewModel : ViewModelBase
                 {
                     if (p.CloseMainWindow())
                     {
-                        if (!p.WaitForExit(10000))
+                        await Task.Run(() => p.WaitForExit(2000));
+                        if (!p.HasExited)
                         {
                             p.Kill();
                         }
@@ -147,7 +151,6 @@ public partial class AppInfoViewModel : ViewModelBase
         }
     }
 
-
     [RelayCommand]
     private async Task ToggleFavorite()
     {
@@ -159,7 +162,9 @@ public partial class AppInfoViewModel : ViewModelBase
     [RelayCommand]
     private async Task Delete()
     {
-        await _appService.Delete(SelectedApp!);
+        bool ok = await _appService.Delete(SelectedApp!);
+        if (ok)
+            SelectedApp = null;
     }
 
 
@@ -233,10 +238,51 @@ public partial class AppInfoViewModel : ViewModelBase
         var filePath = await FilePickerService.PickExeFileAsync();
         if (filePath == null) return;
 
+        if (filePath.Length >= 250) return;
+        
+        var existingByPath = await _appDbService.GetByPathAsync(filePath);
+        if (existingByPath != null)
+        {
+            var dialog = new InfoDialog("Это приложение уже добавлено!");
+            await dialog.ShowDialog(App.MainWindow!);
+
+            return;
+        }
+        
         SelectedApp.Path = filePath;
         SelectedApp.ProcessName = Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant();
     
         await _appDbService.UpdateAppAsync(SelectedApp);
     }
     
+    [RelayCommand]
+    private async Task EditName()
+    {
+        if (SelectedApp == null) return;
+    
+        var dialog = new TextDialog("Введите новое имя!");
+        var name = await dialog.ShowDialog<string?>(App.MainWindow!);
+
+        if (name == null) return;
+        
+        SelectedApp.Name = name;
+    
+        await _appDbService.UpdateAppAsync(SelectedApp);
+    }
+    
+    [RelayCommand]
+    private async Task EditIcon()
+    {
+        if (SelectedApp == null) return;
+
+        await _appService.EditIcon();
+    }
+    
+    [RelayCommand]
+    private async Task ResetIcon()
+    {
+        if (SelectedApp == null) return;
+
+        await _appService.ResetIcon();
+    }
 }

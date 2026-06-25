@@ -52,7 +52,7 @@
                     </Grid>
                 </Button>
                 <Button Grid.Column="0"
-                        Classes="app-toggle-off"
+                        Classes="primary"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
@@ -65,13 +65,42 @@
                     </Grid>
                 </Button>
                 <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="40" Width="40"
-                        Classes="app-info">
+                        Classes="primary">
                     <Button.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="Удалить"
-                                      Command="{Binding DeleteCommand}" />
+                            <!-- Основные пункты -->
+                            <MenuItem Header="Изменить имя"
+                                      Command="{Binding EditNameCommand}">
+                            </MenuItem>
+    
                             <MenuItem Header="Изменить путь"
-                                      Command="{Binding EditPathCommand}" />
+                                      Command="{Binding EditPathCommand}">
+                            </MenuItem>
+    
+                            <!-- Разделитель -->
+                            <Separator/>
+    
+                            <!-- Подменю для иконок -->
+                            <MenuItem Header="Иконка">
+        
+                                <MenuItem Header="Изменить иконку"
+                                          Command="{Binding EditIconCommand}"/>
+                                <MenuItem Header="Сбросить иконку"
+                                          Command="{Binding ResetIconCommand}"/>
+                            </MenuItem>
+    
+                            <!-- Разделитель -->
+                            <Separator/>
+    
+                            <!-- Опасный пункт -->
+                            <MenuItem Header="Удалить"
+                                      Command="{Binding DeleteCommand}">
+                                <MenuItem.Styles>
+                                    <Style Selector="MenuItem">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </Style>
+                                </MenuItem.Styles>
+                            </MenuItem>
                         </MenuFlyout>
                     </Button.Flyout>
                     <Image Source="/Assets/Icons/down-arrow.png" Width="20" />
@@ -83,47 +112,47 @@
                   ColumnDefinitions="* *" ColumnSpacing="10" 
                   RowDefinitions="* *" RowSpacing="10">
 
-                <Border Grid.Row="0" Grid.Column="0" Classes="Tile" Height="60">
+                <Border Grid.Row="0" Grid.Column="0" Classes="TileInto" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                        <TextBlock Text="Время за сегодня" Classes="caption"  />
+                        <TextBlock Text="Время за сегодня" Classes="caption"/>
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SelectedApp?.UsageTimeSeconds, Converter={StaticResource SecondsToTimeString}}"
-                                   FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
+                                   Classes="info-TextBlock"
+                                   Text="{Binding SelectedApp?.UsageTimeSeconds, Converter={StaticResource SecondsToTimeString}}" />
                     </Grid>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="1" Classes="Tile" Height="60">
+                <Border Grid.Row="0" Grid.Column="1" Classes="TileInto" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за неделю" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SecondWeek, Converter={StaticResource SecondsToTimeString}}"
-                                   FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
+                                   Classes="info-TextBlock"
+                                   Text="{Binding SecondWeek, Converter={StaticResource SecondsToTimeString}}"/>
                     </Grid>
                 </Border>
-                <Border Grid.Row="1" Grid.Column="0" Classes="Tile" Height="60">
+                <Border Grid.Row="1" Grid.Column="0" Classes="TileInto" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за месяц" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SecondMonth, Converter={StaticResource SecondsToTimeString}}"
-                                   FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
+                                   Classes="info-TextBlock"
+                                   Text="{Binding SecondMonth, Converter={StaticResource SecondsToTimeString}}"/>
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="1" Classes="Tile" Height="60">
+                <Border Grid.Row="1" Grid.Column="1" Classes="TileInto" Height="60">
                     <Grid RowDefinitions="* *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
                         <TextBlock Text="Время за всё время" Classes="caption" />
                         <TextBlock Grid.Row="1"
-                                   Text="{Binding SecondAll, Converter={StaticResource SecondsToTimeString}}"
-                                   FontSize="15" Foreground="#8a59b1" FontWeight="Bold" />
+                                   Classes="info-TextBlock"
+                                   Text="{Binding SecondAll, Converter={StaticResource SecondsToTimeString}}"/>
                     </Grid>
                 </Border>
             </Grid>
 
 
             <Grid Grid.Column="0" Grid.Row="3">
-                <Border Classes="Tile">
+                <Border Classes="TileInto">
                     <Grid RowDefinitions="Auto *" Margin="10" RowSpacing="10">
                         <Grid ColumnDefinitions="* Auto">
-                            <TextBlock Text="Заметки" VerticalAlignment="Center" />
+                            <TextBlock Text="Заметки" VerticalAlignment="Center" Classes="h4" />
                             <Button Grid.Column="1" Content="Редактировать" Padding="0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
@@ -136,7 +165,7 @@
                         </Grid>
 
                         <TextBox Grid.Row="1"
-                                 Classes="NoteBox"
+                                 Classes="textBox" 
                                  Text="{Binding SelectedApp?.NoteText}"
                                  IsVisible="{Binding IsEditing}"
                                  TextWrapping="Wrap"
@@ -160,13 +189,13 @@
         <Grid Grid.Column="1" RowDefinitions="* Auto" RowSpacing="10">
 
             <Grid Grid.Row="0" MinWidth="350">
-                <Border Classes="Tile">
+                <Border Classes="TileInto">
                     <ContentControl Content="{Binding Chart}" />
                 </Border>
             </Grid>
             
             <Grid Grid.Row="1">
-                <Border Classes="Tile">
+                <Border Classes="TileInto">
                     <Grid ColumnDefinitions="Auto * Auto" ColumnSpacing="5" Margin="8">
                         <Button Grid.Column="0" Classes="copy" Content="📂" Command="{Binding OpenFolderCommand}" />
                         <StackPanel Grid.Column="1" Spacing="5" VerticalAlignment="Center">

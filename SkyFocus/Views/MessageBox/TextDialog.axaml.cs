@@ -5,13 +5,14 @@ using Avalonia.Markup.Xaml;
 
 namespace SkyFocus.Views.MessageBox;
 
-public partial class InfoDialog : Window
+public partial class TextDialog : Window
 {
-    public InfoDialog()
+    public TextDialog()
     {
         InitializeComponent();
     }
-    public InfoDialog(string title)
+    
+    public TextDialog(string title)
     {
         InitializeComponent();
         
@@ -20,6 +21,10 @@ public partial class InfoDialog : Window
     
     private void OnYesClick(object? sender, RoutedEventArgs e)
     {
-        Close();
+        Close(TextBox.Text);
+    }
+    private void OnNoClick(object? sender, RoutedEventArgs e)
+    {
+        Close(null);
     }
 }

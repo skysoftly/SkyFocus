@@ -138,8 +138,6 @@ public partial class App : Application
             {
                 DataContext = sp.GetRequiredService<MainWindowViewModel>()
             });
-        services.AddSingleton<ConfirmDialog>();
-        services.AddSingleton<InfoDialog>();
     }
 
     private string GridLengthToString(GridLength length)

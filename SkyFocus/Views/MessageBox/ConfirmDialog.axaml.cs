@@ -11,6 +11,11 @@ public partial class ConfirmDialog : Window
     {
         InitializeComponent();
     }
+    public ConfirmDialog(string title)
+    {
+        InitializeComponent();
+        Title.Text = title;
+    }
 
     private void OnYesClick(object? sender, RoutedEventArgs e)
     {

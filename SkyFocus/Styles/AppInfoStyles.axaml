@@ -2,125 +2,155 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:SkyFocus.Controls">
     <Design.PreviewWith>
-        <Grid Width="1920" Height="1080">
-            
-            <Grid ColumnDefinitions="* *" RowDefinitions="Auto *" Margin="5"
-                  IsVisible="True">
-                <StackPanel Orientation="Vertical" Margin="20" Spacing="30">
-                    <StackPanel Orientation="Horizontal" Spacing="30" Margin="10">
-                        <Image Source="/Assets/icon.png" Height="40" Width="40" />
-                        <StackPanel>
-                            <TextBlock Text="SkyFocus" FontSize="20" />
-                        </StackPanel>
-                    </StackPanel>
-                    <Grid ColumnDefinitions="* 50" ColumnSpacing="10">
-                        <Button Grid.Column="0" 
-                                Classes="app-toggle"
-                                HorizontalAlignment="Stretch"
-                                Height="50">
-                            <controls:StateTextBlock
-                                ActiveText="✕ Закрыть"
-                                InactiveText="▶ Запустить"
-                                Classes="app-toggle"/>
-                        </Button>
-                        <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="50"
-                                Content="-"/>
-                    </Grid>
-                </StackPanel>
-
-            </Grid>
-        </Grid>
+        <Border Padding="20" Width="1000" Height="700">
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" Height="40" Width="40"
+                        Classes="primary" >
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <!-- Основные пункты -->
+                            <MenuItem Header="Изменить имя">
+                            </MenuItem>
+    
+                            <MenuItem Header="Изменить путь">
+                            </MenuItem>
+    
+                            <!-- Разделитель -->
+                            <Separator/>
+    
+                            <!-- Подменю для иконок -->
+                            <MenuItem Header="Иконка">
+        
+                                <MenuItem Header="Изменить иконку"/>
+                                <MenuItem Header="Сбросить иконку"/>
+                                <MenuItem Header="Иконка">
+        
+                                    <MenuItem Header="Изменить иконку"/>
+                                    <MenuItem Header="Сбросить иконку"/>
+                                </MenuItem>
+                            </MenuItem>
+    
+                            <!-- Разделитель -->
+                            <Separator/>
+    
+                            <!-- Опасный пункт -->
+                            <MenuItem Header="Удалить">
+                                <MenuItem.Styles>
+                                    <Style Selector="MenuItem">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </Style>
+                                </MenuItem.Styles>
+                            </MenuItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <Image Source="/Assets/Icons/down-arrow.png" Width="20" />
+                </Button>
+        </Border>
     </Design.PreviewWith>
 
     <!-- Add Styles Here -->
-    
+    <!-- -->
     <Style Selector="TextBlock.app-name">
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
     <Style Selector="Button.app-toggle-on">
-        <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Background" Value="#A8343C"/>
-        
-        
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                    <GradientStop Color="#f00000" Offset="0" />
+                    <GradientStop Color="#8f0000" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+
         <Style Selector="^:pointerover /template/ContentPresenter">
-            <Setter Property="Background" Value="#d7424d" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#ff2424" Offset="0" />
+                        <GradientStop Color="#b30000" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style Selector="^:pressed /template/ContentPresenter">
-            <Setter Property="Background" Value="#8b272e" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#c20000" Offset="0" />
+                        <GradientStop Color="#750000" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="^:disabled /template/ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#8f0000" Offset="0" />
+                        <GradientStop Color="#4d0000" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Style>
-    <Style Selector="Button.app-toggle-off">
-        <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Background" Value="#FF6B3596"/>
-        
+    
+    <Style Selector="Button.primary">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                    <GradientStop Color="#FFA700FF" Offset="0" />
+                    <GradientStop Color="#FF5E0090" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+
         <Style Selector="^:pointerover /template/ContentPresenter">
-            <Setter Property="Background" Value="#9252c7" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#C400E6" Offset="0" />
+                        <GradientStop Color="#6B0099" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
+    
         <Style Selector="^:pressed /template/ContentPresenter">
-            <Setter Property="Background" Value="#592880" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#9900B3" Offset="0" />
+                        <GradientStop Color="#4D0073" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
-    </Style>
-    <Style Selector="controls|StateTextBlock.app-toggle">
-        <Setter Property="FontSize" Value="20"/>
-        
-        <Style Selector="^:checked">
-            <Setter Property="FontSize" Value="20" />
-        </Style>
-    </Style>
-    <Style Selector="Button.app-info">
-        <Setter Property="CornerRadius" Value="10"/>
-    </Style>
     
-    
-    
-    <Style Selector="controls|StateTextBlock.app-state">
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Foreground" Value="#9E9E9E" />
-        
-        <Style Selector="^:checked">
-            <Setter Property="Foreground" Value="#4CAF50" />
-        </Style>
-    </Style>
-    
-    
-    <Style Selector="ToggleButton.favorite-toggle">
-        <Setter Property="FontSize" Value="25" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Cursor" Value="Hand" />
-        
-        
-        <Style Selector="^:pointerover /template/ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
-
-        <Style Selector="^:checked /template/ContentPresenter">
-            <Setter Property="Content" Value="★" />
-            <Setter Property="Foreground" Value="Gold" />
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
-
-        <Style Selector="^:unchecked /template/ContentPresenter">
-            <Setter Property="Content" Value="☆" />
-            <Setter Property="Foreground" Value="Gray" />
-            <Setter Property="Background" Value="Transparent" />
+        <Style Selector="^:disabled /template/ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#7A0080" Offset="0" />
+                        <GradientStop Color="#3D0040" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Style>
 
-    
-    
     <Style Selector="TextBlock.caption-white">
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="LightGray" />
     </Style>
-    
+
     <Style Selector="SelectableTextBlock.caption-white">
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="LightGray" />
     </Style>
 
-
-    
     <Style Selector="Button.copy">
         <Setter Property="Padding" Value="5" />
         <Setter Property="Background" Value="Transparent" />
@@ -136,8 +166,8 @@
         </Style>
     </Style>
 
-    
-    <Style Selector="TextBlock.NoteBox">
+
+    <Style Selector="TextBox.NoteBox">
         <Setter Property="Padding" Value="5" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#a08351a9" />
@@ -151,4 +181,11 @@
             <Setter Property="Foreground" Value="#b0643489" />
         </Style>
     </Style>
+
+    <Style Selector="TextBlock.info-TextBlock">
+        <Setter Property="Foreground" Value="#AB80D6" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    
+    
 </Styles>
