@@ -21,11 +21,11 @@ public class AppDbContext : DbContext
             entity.ToTable("App");
             entity.HasKey(a => a.Id);
             
-            entity.Property(a => a.Name).IsRequired().HasMaxLength(250);
+            entity.Property(a => a.Name).IsRequired().HasMaxLength(50);
             entity.Property(a => a.Path).IsRequired().HasMaxLength(250);
             entity.HasIndex(a => a.Path).IsUnique();
             
-            entity.Property(a => a.ProcessName).IsRequired().HasMaxLength(250);
+            entity.Property(a => a.ProcessName).IsRequired().HasMaxLength(50);
             entity.Property(a => a.NoteText).HasMaxLength(250);
             
             entity.HasIndex(a => a.IsFavorite);
