@@ -170,8 +170,8 @@ public partial class AppService : ObservableObject
             };
 
             await _appDbService.AddAsync(app);
-        
-            await LoadIconAsync(app);
+
+            await ResetIcon(app);
         
             _apps.Add(app);
         }
@@ -247,15 +247,13 @@ public partial class AppService : ObservableObject
         }
     }
 
-    public async Task ResetIcon()
+    public async Task ResetIcon(AppRowDto app)
     {
-        if (SelectedApp == null) return;
-
         // Удаляем кастомную иконку
-        IconService.DeleteIcon(SelectedApp.Id);
+        IconService.DeleteIcon(app.Id);
         
         // Загружаем заново из exe
-        await LoadIconAsync(SelectedApp);
+        await LoadIconAsync(app);
     }
     
     public async Task<List<AppRowDto>> GetTopAppsAsync(int count = 5)

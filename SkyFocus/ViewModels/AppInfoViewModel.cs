@@ -283,6 +283,6 @@ public partial class AppInfoViewModel : ViewModelBase
     {
         if (SelectedApp == null) return;
 
-        await _appService.ResetIcon();
+        await _appService.ResetIcon(SelectedApp);
     }
 }

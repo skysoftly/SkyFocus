@@ -7,7 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkyFocus.Views.TopAppsView"
              x:DataType="vm:TopAppsViewModel">
-    <StackPanel Margin="10" Spacing="10">
+    <Grid Margin="10 5" RowDefinitions="Auto *" RowSpacing="10">
         <Grid ColumnDefinitions="* *">
             <TextBlock Text="Топ приложений" Classes="h5" VerticalAlignment="Center" />
             <ComboBox Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding Periods}"
@@ -16,27 +16,34 @@
                       Padding="10,6"
                       CornerRadius="6" />
         </Grid>
-        <ItemsControl ItemsSource="{Binding TopApps}" HorizontalAlignment="Left">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="5" Rows="1" ColumnSpacing="10"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Classes="TileInto" Height="80">
-                        <Grid RowDefinitions="* * *" VerticalAlignment="Center" Margin="10 0" RowSpacing="5">
-                            <Grid ColumnDefinitions="Auto *">
-                                <TextBlock Text="{Binding Rank}" />
-                                <Image Grid.Column="1" Source="{Binding App.Icon}" Width="30" Height="30" />
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Disabled"
+                      HorizontalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding TopApps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Classes="TileInto">
+                            <Grid RowDefinitions="* * *" VerticalAlignment="Center" RowSpacing="5" Margin="10"
+                                  MinWidth="80">
+                                <Grid ColumnDefinitions="Auto *" ColumnSpacing="10">
+                                    <TextBlock Text="{Binding Rank}" Classes="h4" />
+                                    <Image Grid.Column="1" Source="{Binding App.Icon}" Width="30" Height="30"
+                                           HorizontalAlignment="Left" />
+                                </Grid>
+                                <TextBlock Grid.Row="1" Text="{Binding App.Name}" TextAlignment="Center" />
+                                <TextBlock Grid.Row="2"
+                                           Text="{Binding TotalSeconds, Converter={StaticResource SecondsToTimeString}}"
+                                           TextAlignment="Center" />
                             </Grid>
-                            <TextBlock Grid.Row="1" Text="{Binding App.Name}" />
-                            <TextBlock Grid.Row="2"
-                                       Text="{Binding TotalSeconds, Converter={StaticResource SecondsToTimeString}}" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

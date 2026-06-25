@@ -24,15 +24,16 @@
             <Grid Grid.Row="0" ColumnDefinitions="Auto *">
                 <Image Source="{Binding SelectedApp?.Icon}" Height="40" Width="40" Margin="10" />
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal">
+                    <Grid ColumnDefinitions="* Auto">
                         <TextBlock Text="{Binding  SelectedApp?.Name}" FontSize="20" Classes="app-name"
-                                   VerticalAlignment="Center" MaxWidth="" />
+                                   TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center" />
 
-                        <ToggleButton IsChecked="{Binding SelectedApp?.IsFavorite}"
+                        <ToggleButton Grid.Column="1" IsChecked="{Binding SelectedApp?.IsFavorite}"
                                       Command="{Binding ToggleFavoriteCommand}"
                                       Classes="favorite-toggle"
                                       HorizontalAlignment="Left" />
-                    </StackPanel>
+                    </Grid>
                     <controls:StateTextBlock Classes="app-state" ActiveText="● Запущено" InactiveText="○ Не запущено"
                                              IsChecked="{Binding  SelectedApp?.IsRunning}" HorizontalAlignment="Left" />
                 </StackPanel>
