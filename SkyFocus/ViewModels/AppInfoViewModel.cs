@@ -250,7 +250,7 @@ public partial class AppInfoViewModel : ViewModelBase
         }
         
         SelectedApp.Path = filePath;
-        SelectedApp.ProcessName = Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant();
+        SelectedApp.ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath));
     
         await _appDbService.UpdateAppAsync(SelectedApp);
     }

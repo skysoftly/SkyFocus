@@ -75,7 +75,7 @@ public partial class TrackingService : ObservableObject
             // процесс мог закрыться за долю секунды
         }
     }
-    private string CleanName(string name)
+    public static string CleanName(string name)
     {
         name = name.ToLowerInvariant();
 
@@ -84,7 +84,9 @@ public partial class TrackingService : ObservableObject
             .Replace("renderer", "")
             .Replace("gpu", "")
             .Replace("crashpad", "")
-            .Replace("utility", "");
+            .Replace("utility", "")
+            .Replace(" ", "")
+            .Replace(".", "");
 
         if (string.IsNullOrWhiteSpace(name))
             return "";

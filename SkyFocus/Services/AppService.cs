@@ -165,7 +165,7 @@ public partial class AppService : ObservableObject
         {
             Name = Path.GetFileNameWithoutExtension(filePath),
             Path = filePath,
-            ProcessName = Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant()
+            ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath))
         };
 
         await _appDbService.AddAsync(app);
