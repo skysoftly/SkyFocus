@@ -237,34 +237,37 @@ public partial class AppInfoViewModel : ViewModelBase
 
         try
         {
-            var filePath = await FilePickerService.PickExeFileAsync();
-            if (string.IsNullOrEmpty(filePath)) return;
-
-            // Проверка длины пути
-            if (filePath.Length >= 250)
+            await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                var dialog = new InfoDialog("Путь слишком длинный!");
-                await dialog.ShowDialog(App.MainWindow!);
-                return;
-            }
+                var filePath = await FilePickerService.PickExeFileAsync();
+                if (string.IsNullOrEmpty(filePath)) return;
 
-            // Проверка на дубликат (исключаем текущее приложение)
-            var existingByPath = await _appDbService.GetByPathAsync(filePath);
-            if (existingByPath != null && existingByPath.Id != SelectedApp.Id)
-            {
-                var dialog = new InfoDialog("Это приложение уже добавлено!");
-                await dialog.ShowDialog(App.MainWindow!);
-                return;
-            }
+                // Проверка длины пути
+                if (filePath.Length >= 250)
+                {
+                    var dialog = new InfoDialog("Путь слишком длинный!");
+                    await dialog.ShowDialog(App.MainWindow!);
+                    return;
+                }
 
-            // Обновляем
-            SelectedApp.Path = filePath;
-            SelectedApp.ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath));
+                // Проверка на дубликат (исключаем текущее приложение)
+                var existingByPath = await _appDbService.GetByPathAsync(filePath);
+                if (existingByPath != null && existingByPath.Id != SelectedApp.Id)
+                {
+                    var dialog = new InfoDialog("Это приложение уже добавлено!");
+                    await dialog.ShowDialog(App.MainWindow!);
+                    return;
+                }
 
-            await _appDbService.UpdateAppAsync(SelectedApp);
+                // Обновляем
+                SelectedApp.Path = filePath;
+                SelectedApp.ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath));
 
-            // Обновляем иконку
-            await _appService.ResetIcon(SelectedApp);
+                await _appDbService.UpdateAppAsync(SelectedApp);
+
+                // Обновляем иконку
+                await _appService.ResetIcon(SelectedApp);
+            });
         }
         catch (Exception ex)
         {
@@ -281,19 +284,30 @@ public partial class AppInfoViewModel : ViewModelBase
 
         try
         {
-            var dialog = new TextDialog("Введите новое имя!");
-            var name = await dialog.ShowDialog<string?>(App.MainWindow!);
+            var name = await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var dialog = new TextDialog("Введите новое имя!");
+
+                if (App.MainWindow == null)
+                    return (string?)null;
+
+                return await dialog.ShowDialog<string?>(App.MainWindow);
+            });
+
 
             if (string.IsNullOrEmpty(name)) return;
 
             SelectedApp.Name = name;
             await _appDbService.UpdateAppAsync(SelectedApp);
         }
-        catch (OperationCanceledException)
+        catch (Exception ex)
         {
             // Отменено
-            var infoDialog = new InfoDialog("Ошибка!");
-            await infoDialog.ShowDialog(App.MainWindow!);
+            // await Dispatcher.UIThread.InvokeAsync(async () =>
+            // {
+            //     var infoDialog = new InfoDialog($"Ошибка: {ex.Message}");
+            //     await infoDialog.ShowDialog(App.MainWindow!);
+            // });
         }
     }
 
@@ -301,15 +315,16 @@ public partial class AppInfoViewModel : ViewModelBase
     private async Task EditIcon()
     {
         if (SelectedApp == null) return;
-
-        await _appService.EditIcon();
+        await Dispatcher.UIThread.InvokeAsync(async () => { await _appService.EditIcon(); });
     }
 
     [RelayCommand]
     private async Task ResetIcon()
     {
         if (SelectedApp == null) return;
-
-        await _appService.ResetIcon(SelectedApp);
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await _appService.ResetIcon(SelectedApp); 
+        });
     }
 }

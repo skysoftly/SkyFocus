@@ -133,6 +133,7 @@ public partial class App : Application
         services.AddScoped<ChartPageViewModel>();
         services.AddScoped<MainPageViewModel>();
         services.AddScoped<TopAppsViewModel>();
+        services.AddScoped<SettingsViewModel>();
 
         // Окна
         services.AddSingleton<MainWindow>(sp =>

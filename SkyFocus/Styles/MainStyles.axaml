@@ -141,7 +141,7 @@
 
     <Style Selector="TextBlock.caption">
         <Setter Property="FontSize" Value="10" />
-        <Setter Property="Foreground" Value="#66FFFFFF" />
+        <Setter Property="Foreground" Value="#7d7d7d" />
     </Style>
 
 
@@ -349,6 +349,26 @@
                     </TransformGroup>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style Selector="^:disabled /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#333333" />
+        </Style>
+    </Style>
+    
+    <Style Selector="Button.transparent-btn-caption">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#7d7d7d" />
+        <Setter Property="FontSize" Value="16" />
+        <Style Selector="^:pointerover /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#999999" />
+        </Style>
+
+        <Style Selector="^:pressed /template/ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#696969" />
         </Style>
         <Style Selector="^:disabled /template/ContentPresenter">
             <Setter Property="Background" Value="Transparent" />

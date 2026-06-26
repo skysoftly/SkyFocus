@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 
 namespace SkyFocus.Services;
 
@@ -11,25 +12,29 @@ public static class FilePickerService
     {
         try
         {
-            await Task.Delay(100);
-            
-            var files = await App.MainWindow!.StorageProvider
-                .OpenFilePickerAsync(
-                    new FilePickerOpenOptions
-                    {
-                        Title = "Выберите приложение",
-                        AllowMultiple = false,
-                        FileTypeFilter = new[]
+            // 👇 КЛЮЧЕВОЙ МОМЕНТ: запускаем на UI потоке принудительно
+            return await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                // Небольшая задержка, чтобы UI успел "продышаться"
+                await Task.Delay(50);
+                
+                var files = await App.MainWindow!.StorageProvider
+                    .OpenFilePickerAsync(
+                        new FilePickerOpenOptions
                         {
-                            new FilePickerFileType("Исполняемые файлы")
+                            Title = "Выберите приложение",
+                            AllowMultiple = false,
+                            FileTypeFilter = new[]
                             {
-                                Patterns = new[] { "*.exe", "*.url" }
+                                new FilePickerFileType("Исполняемые файлы")
+                                {
+                                    Patterns = new[] { "*.exe", "*.url" }
+                                }
                             }
-                        }
-                    })
-                .ConfigureAwait(false);
+                        });
 
-            return files.Count > 0 ? files[0].Path.LocalPath : null;
+                return files.Count > 0 ? files[0].Path.LocalPath : null;
+            }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -42,25 +47,27 @@ public static class FilePickerService
     {
         try
         {
-            await Task.Delay(100);
-            
-            var files = await App.MainWindow!.StorageProvider
-                .OpenFilePickerAsync(
-                    new FilePickerOpenOptions
-                    {
-                        Title = "Выберите изображение",
-                        AllowMultiple = false,
-                        FileTypeFilter = new[]
+            return await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                await Task.Delay(50);
+                
+                var files = await App.MainWindow!.StorageProvider
+                    .OpenFilePickerAsync(
+                        new FilePickerOpenOptions
                         {
-                            new FilePickerFileType("Изображения")
+                            Title = "Выберите изображение",
+                            AllowMultiple = false,
+                            FileTypeFilter = new[]
                             {
-                                Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                                new FilePickerFileType("Изображения")
+                                {
+                                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                                }
                             }
-                        }
-                    })
-                .ConfigureAwait(false);
+                        });
 
-            return files.Count > 0 ? files[0].Path.LocalPath : null;
+                return files.Count > 0 ? files[0].Path.LocalPath : null;
+            }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -73,34 +80,34 @@ public static class FilePickerService
     {
         try
         {
-            await Task.Delay(100);
-            
-            var files = await App.MainWindow!.StorageProvider
-                .OpenFilePickerAsync(
-                    new FilePickerOpenOptions
-                    {
-                        Title = "Выберите приложения",
-                        AllowMultiple = true,
-                        FileTypeFilter = new[]
-                        {
-                            new FilePickerFileType("Исполняемые файлы")
-                            {
-                                Patterns = new[] { "*.exe", "*.url" }
-                            }
-                        }
-                    })
-                .ConfigureAwait(false);
-
-            if (files.Count < 0) return null;
-            
-            var filePaths = new List<string>();
-
-            foreach (var filePath in files)
+            return await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                filePaths.Add(filePath.Path.LocalPath);
-            }
-            
-            return filePaths;
+                await Task.Delay(50);
+                
+                var files = await App.MainWindow!.StorageProvider
+                    .OpenFilePickerAsync(
+                        new FilePickerOpenOptions
+                        {
+                            Title = "Выберите приложения",
+                            AllowMultiple = true,
+                            FileTypeFilter = new[]
+                            {
+                                new FilePickerFileType("Исполняемые файлы")
+                                {
+                                    Patterns = new[] { "*.exe", "*.url" }
+                                }
+                            }
+                        });
+
+                if (files.Count == 0) return null;
+                
+                var filePaths = new List<string>();
+                foreach (var file in files)
+                {
+                    filePaths.Add(file.Path.LocalPath);
+                }
+                return filePaths;
+            }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
