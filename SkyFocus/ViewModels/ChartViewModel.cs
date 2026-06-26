@@ -61,7 +61,7 @@ public partial class ChartViewModel : ViewModelBase
         string savedPeriodType = _settingsService.Get("SelectedPeriodType", PeriodType.CalendarWeek.ToString());
         SelectedPeriod = Periods.FirstOrDefault(p => p.Type.ToString() == savedPeriodType) ?? Periods[0];
         
-        
+        _appDbService.DataChanged += AppDbServiceOnDataChanged;
         
         
         YAxes =
@@ -71,6 +71,11 @@ public partial class ChartViewModel : ViewModelBase
                 MinLimit = 0
             }
         ];
+    }
+
+    private void AppDbServiceOnDataChanged(object? sender, EventArgs e)
+    {
+        _ = UpdateChart(_appId);
     }
 
 

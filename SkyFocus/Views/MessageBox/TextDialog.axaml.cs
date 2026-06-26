@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -18,7 +20,14 @@ public partial class TextDialog : Window
         
         Title.Text = title;
     }
-    
+
+    protected override async void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        await Task.Delay(1);
+        TextBox?.Focus();
+    }
+
     private void OnYesClick(object? sender, RoutedEventArgs e)
     {
         Close(TextBox.Text);

@@ -7,19 +7,20 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkyFocus.Views.TopAppsView"
              x:DataType="vm:TopAppsViewModel">
-    <Grid Margin="10 5" RowDefinitions="Auto *" RowSpacing="10">
+    <Grid  Margin="10" RowDefinitions="Auto *" RowSpacing="10">
         <Grid ColumnDefinitions="* *">
             <TextBlock Text="Топ приложений" Classes="h5" VerticalAlignment="Center" />
             <ComboBox Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding Periods}"
                       SelectedItem="{Binding SelectedPeriod}"
                       DisplayMemberBinding="{Binding DisplayName}"
                       Padding="10,6"
+                      Margin="0 -5 0 0"
                       CornerRadius="6" />
         </Grid>
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Disabled"
                       HorizontalScrollBarVisibility="Visible">
-            <ItemsControl ItemsSource="{Binding TopApps}">
+            <ItemsControl ItemsSource="{Binding TopApps}" Margin="0 0 0 10">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Spacing="10" Orientation="Horizontal" />
@@ -35,10 +36,12 @@
                                     <Image Grid.Column="1" Source="{Binding App.Icon}" Width="30" Height="30"
                                            HorizontalAlignment="Left" />
                                 </Grid>
-                                <TextBlock Grid.Row="1" Text="{Binding App.Name}" TextAlignment="Center" />
+                                <TextBlock Grid.Row="1" Text="{Binding App.Name}" TextAlignment="Center"
+                                           Classes="h5" />
                                 <TextBlock Grid.Row="2"
                                            Text="{Binding TotalSeconds, Converter={StaticResource SecondsToTimeString}}"
-                                           TextAlignment="Center" />
+                                           TextAlignment="Center" 
+                                           Classes="info-TextBlock"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

@@ -6,6 +6,7 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
@@ -139,6 +140,10 @@ public partial class App : Application
             {
                 DataContext = sp.GetRequiredService<MainWindowViewModel>()
             });
+
+        // services.AddSingleton<ConfirmDialog>();
+        // services.AddSingleton<InfoDialog>();
+        // services.AddSingleton<TextDialog>();
     }
 
     private string GridLengthToString(GridLength length)

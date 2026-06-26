@@ -229,47 +229,74 @@ public partial class AppInfoViewModel : ViewModelBase
         if (SelectedApp != null)
             await _appDbService.UpdateAppAsync(SelectedApp);
     }
-    
+
     [RelayCommand]
     private async Task EditPath()
     {
         if (SelectedApp == null) return;
-    
-        var filePath = await FilePickerService.PickExeFileAsync();
-        if (filePath == null) return;
 
-        if (filePath.Length >= 250) return;
-        
-        var existingByPath = await _appDbService.GetByPathAsync(filePath);
-        if (existingByPath != null)
+        try
         {
-            var dialog = new InfoDialog("Это приложение уже добавлено!");
-            await dialog.ShowDialog(App.MainWindow!);
+            var filePath = await FilePickerService.PickExeFileAsync();
+            if (string.IsNullOrEmpty(filePath)) return;
 
-            return;
+            // Проверка длины пути
+            if (filePath.Length >= 250)
+            {
+                var dialog = new InfoDialog("Путь слишком длинный!");
+                await dialog.ShowDialog(App.MainWindow!);
+                return;
+            }
+
+            // Проверка на дубликат (исключаем текущее приложение)
+            var existingByPath = await _appDbService.GetByPathAsync(filePath);
+            if (existingByPath != null && existingByPath.Id != SelectedApp.Id)
+            {
+                var dialog = new InfoDialog("Это приложение уже добавлено!");
+                await dialog.ShowDialog(App.MainWindow!);
+                return;
+            }
+
+            // Обновляем
+            SelectedApp.Path = filePath;
+            SelectedApp.ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath));
+
+            await _appDbService.UpdateAppAsync(SelectedApp);
+
+            // Обновляем иконку
+            await _appService.ResetIcon(SelectedApp);
         }
-        
-        SelectedApp.Path = filePath;
-        SelectedApp.ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath));
-    
-        await _appDbService.UpdateAppAsync(SelectedApp);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"EditPath error: {ex.Message}");
+            var dialog = new InfoDialog($"Ошибка: {ex.Message}");
+            await dialog.ShowDialog(App.MainWindow!);
+        }
     }
-    
+
     [RelayCommand]
     private async Task EditName()
     {
         if (SelectedApp == null) return;
-    
-        var dialog = new TextDialog("Введите новое имя!");
-        var name = await dialog.ShowDialog<string?>(App.MainWindow!);
 
-        if (name == null) return;
-        
-        SelectedApp.Name = name;
-    
-        await _appDbService.UpdateAppAsync(SelectedApp);
+        try
+        {
+            var dialog = new TextDialog("Введите новое имя!");
+            var name = await dialog.ShowDialog<string?>(App.MainWindow!);
+
+            if (string.IsNullOrEmpty(name)) return;
+
+            SelectedApp.Name = name;
+            await _appDbService.UpdateAppAsync(SelectedApp);
+        }
+        catch (OperationCanceledException)
+        {
+            // Отменено
+            var infoDialog = new InfoDialog("Ошибка!");
+            await infoDialog.ShowDialog(App.MainWindow!);
+        }
     }
-    
+
     [RelayCommand]
     private async Task EditIcon()
     {
@@ -277,7 +304,7 @@ public partial class AppInfoViewModel : ViewModelBase
 
         await _appService.EditIcon();
     }
-    
+
     [RelayCommand]
     private async Task ResetIcon()
     {

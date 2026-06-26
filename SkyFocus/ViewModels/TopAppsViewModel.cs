@@ -108,7 +108,5 @@ public partial class TopAppsViewModel : ViewModelBase
             
             TopApps.Add(topApp);
         }
-
-        Console.WriteLine("Update");
     }
 }

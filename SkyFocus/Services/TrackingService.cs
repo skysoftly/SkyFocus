@@ -64,7 +64,7 @@ public partial class TrackingService : ObservableObject
             
             if (_lastName != name)
             {
-                Console.WriteLine(name);
+                Console.WriteLine($"Process: {name}");
                 ActiveAppChanged?.Invoke(_lastName, name);
                 _lastName = name;
             }
