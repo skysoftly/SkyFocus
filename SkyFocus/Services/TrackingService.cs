@@ -21,7 +21,7 @@ public partial class TrackingService : ObservableObject
 {
     private readonly SettingsService _settingsService;
     private HashSet<string> _trackApps;
-    
+
     private static readonly HashSet<string> _systemProcesses = new(StringComparer.OrdinalIgnoreCase)
     {
         "skyfocus",
@@ -49,33 +49,32 @@ public partial class TrackingService : ObservableObject
         "procexp64",
         "screenclippinghost"
     };
-    
+
     public event Action<string>? AppAddedToTracking;
-    
+
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-    
+
     private CancellationTokenSource? _cts;
-    
+
     public event Action<HashSet<string>>? RunningAppsChanged;
     public event Action<string?, string>? ActiveAppChanged;
-    
+
     private string? _lastName;
-    
+
     private readonly IDbContextFactory<AppDbContext> _dbFactory;
 
-    public TrackingService(IDbContextFactory<AppDbContext> dbFactory,SettingsService settingsService)
+    public TrackingService(IDbContextFactory<AppDbContext> dbFactory, SettingsService settingsService)
     {
         _settingsService = settingsService;
         _dbFactory = dbFactory;
     }
-    
-    
-    [ObservableProperty]
-    private bool _isRunning;
+
+
+    [ObservableProperty] private bool _isRunning;
 
     public async Task StartAsync()
     {
@@ -85,14 +84,14 @@ public partial class TrackingService : ObservableObject
                 .Select(x => x.ProcessName)
                 .ToListAsync())
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        
+
         _cts = new CancellationTokenSource();
         IsRunning = true;
         while (!_cts.Token.IsCancellationRequested)
         {
             CheckRunningApps();
             CheckFocusedWindow();
-            
+
             await Task.Delay(1000, _cts.Token);
         }
     }
@@ -102,7 +101,7 @@ public partial class TrackingService : ObservableObject
         _cts?.Cancel();
         IsRunning = false;
     }
-    
+
     private void CheckFocusedWindow()
     {
         var hwnd = GetForegroundWindow();
@@ -115,25 +114,25 @@ public partial class TrackingService : ObservableObject
         try
         {
             var process = Process.GetProcessById((int)pid);
-            
+
             var name = CleanName(process.ProcessName);
             var path = process.MainModule?.FileName;
-            
+
             if (_lastName != name)
             {
                 Console.WriteLine($"Process: {name}");
                 ActiveAppChanged?.Invoke(_lastName, name);
-                
-                if (!_trackApps.Contains(name) && !_systemProcesses.Contains(name) &&  _settingsService.Get("IsTrackingNotify", false))
+
+                if (!_trackApps.Contains(name) && !_systemProcesses.Contains(name) &&
+                    _settingsService.Get("IsTrackingNotify", false))
                 {
                     _trackApps.Add(name);
-                    
+
                     _ = SuggestAddAppAsync(name, path);
                 }
 
                 _lastName = name;
             }
-            
         }
         catch
         {
@@ -141,7 +140,7 @@ public partial class TrackingService : ObservableObject
         }
     }
 
-    
+
     private async Task SuggestAddAppAsync(string processName, string? path)
     {
         try
@@ -154,10 +153,10 @@ public partial class TrackingService : ObservableObject
             {
                 ProcessName = processName
             };
-            
+
             db.Tracks.Add(track);
             await db.SaveChangesAsync();
-            
+
             var exists2 = await db.Apps.AnyAsync(t => t.ProcessName == processName);
             if (exists2) return;
         }
@@ -169,28 +168,29 @@ public partial class TrackingService : ObservableObject
 
         var displayName = string.IsNullOrEmpty(processName) ? "приложение" : processName;
 
-        // Диалог в UI-потоке
-        var result = await Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async void () =>
         {
             try
             {
                 var dialog = new ConfirmDialog($"Добавить \"{displayName}\" в список отслеживаемых?")
                 {
-                    Topmost = true,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    Topmost = true
                 };
-                return await dialog.ShowDialog<bool>(App.MainWindow!);
+
+                var result = await dialog.ShowDialog<bool>(App.MainWindow!);
+
+                if (result)
+                {
+                    Console.WriteLine($"User confirmed: {processName}");
+                    AppAddedToTracking?.Invoke(path);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Dialog error: {ex.Message}");
-                return false;
             }
-        });
-
-        if (!result) return;
-
-        AppAddedToTracking?.Invoke(path);
+        }, DispatcherPriority.Normal);
 
         // // Пользователь согласился — добавляем в AppService (Apps)
         // try
@@ -218,7 +218,7 @@ public partial class TrackingService : ObservableObject
         //     Console.WriteLine($"SuggestAddAppAsync (AppService) error: {ex.Message}");
         // }
     }
-    
+
     public static string CleanName(string name)
     {
         name = name.ToLowerInvariant();
@@ -237,7 +237,7 @@ public partial class TrackingService : ObservableObject
 
         return name;
     }
-    
+
     private void CheckRunningApps()
     {
         var processes = Process.GetProcesses();
