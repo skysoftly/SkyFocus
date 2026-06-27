@@ -7,7 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkyFocus.Views.ChartPageView"
              x:DataType="vm:ChartPageViewModel">
-    <Border Grid.Column="0" Classes="Tile">
+    <Border Classes="Tile">
         <Grid RowDefinitions="Auto *">
             <Grid ColumnDefinitions="* *" Margin="10">
                 <TextBlock Grid.Column="0" Text="Общая статистика пользования" Classes="h4" />

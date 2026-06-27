@@ -24,7 +24,7 @@ namespace SkyFocus.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("IconPath")
-                        .HasMaxLength(250)
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsFavorite")
@@ -37,17 +37,17 @@ namespace SkyFocus.Migrations
 
                     b.Property<string>("NoteText")
                         .IsRequired()
-                        .HasMaxLength(250)
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasMaxLength(250)
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProcessName")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -81,6 +81,25 @@ namespace SkyFocus.Migrations
                         .IsUnique();
 
                     b.ToTable("DailyAppStat", (string)null);
+                });
+
+            modelBuilder.Entity("SkyFocus.Data.Entities.TrackEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProcessName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessName")
+                        .IsUnique();
+
+                    b.ToTable("Track", (string)null);
                 });
 
             modelBuilder.Entity("SkyFocus.Data.Entities.DailyAppStatEntity", b =>

@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace SkyFocus.Views;
 
-public partial class SettingsView : UserControl
+public partial class SettingsPageView : UserControl
 {
-    public SettingsView()
+    public SettingsPageView()
     {
         InitializeComponent();
     }

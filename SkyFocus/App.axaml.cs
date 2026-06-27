@@ -10,6 +10,7 @@ using System.Xml;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SkyFocus.Data;
@@ -64,10 +65,39 @@ public partial class App : Application
 
             // _ = GenerateTestDataWithTodayAsync();
         }
+        
+        
+        CheckAutoStart();
 
         base.OnFrameworkInitializationCompleted();
     }
 
+    
+    private async void CheckAutoStart()
+    {
+        // Проверяем, был ли уже задан вопрос
+        var settings = _serviceProvider?.GetService<SettingsService>();
+        if (settings == null) return;
+
+        var asked = settings.Get<bool?>("AutoStartAsked");
+        if (asked != true)
+        {
+            // Первый запуск — показываем вопрос
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var dialog = new ConfirmDialog("Добавить SkyFocus в автозагрузку?");
+                var result = await dialog.ShowDialog<bool?>(App.MainWindow!);
+            
+                if (result == true)
+                {
+                    AutoStartService.Enable();
+                }
+            
+                settings.Set("AutoStartAsked", true);
+            });
+        }
+    }
+    
     private void LoadWindowSettings(SettingsService settings)
     {
         var state = settings.Get<string>("WindowState", "Normal");
@@ -133,7 +163,7 @@ public partial class App : Application
         services.AddScoped<ChartPageViewModel>();
         services.AddScoped<MainPageViewModel>();
         services.AddScoped<TopAppsViewModel>();
-        services.AddScoped<SettingsViewModel>();
+        services.AddScoped<SettingsPageViewModel>();
 
         // Окна
         services.AddSingleton<MainWindow>(sp =>

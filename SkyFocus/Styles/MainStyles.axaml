@@ -5,7 +5,7 @@
     <Design.PreviewWith>
         <Border Width="300">
             <Border Classes="DialogPanel">
-                <Grid Margin="20" RowDefinitions="Auto * Auto Auto Auto Auto" RowSpacing="10">
+                <Grid Margin="20" RowDefinitions="Auto * Auto Auto Auto Auto Auto" RowSpacing="10">
                     <TextBlock Grid.Row="0" x:Name="Title" Text="Введите новое имя!" Classes="h4"
                                HorizontalAlignment="Center" />
                     <TextBox Grid.Row="1" x:Name="TextBox" MaxLength="250" Classes="textBox" />
@@ -57,6 +57,8 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
+
+                    <ToggleSwitch Grid.Row="6" HorizontalAlignment="Right" />
                 </Grid>
             </Border>
         </Border>
@@ -355,7 +357,7 @@
             <Setter Property="Foreground" Value="#333333" />
         </Style>
     </Style>
-    
+
     <Style Selector="Button.transparent-btn-caption">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="Transparent" />
@@ -417,8 +419,8 @@
                 </Style>
             </Style>
         </Style>
-        
-        
+
+
         <Style Selector="^:vertical">
             <Style Selector="^ Thumb">
                 <Setter Property="Width" Value="6" />
@@ -449,5 +451,54 @@
                 </Style>
             </Style>
         </Style>
+    </Style>
+
+    <Style Selector="ToggleSwitch">
+        <Style Selector="^ ContentPresenter#PART_OffContentPresenter">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^ ContentPresenter#PART_OnContentPresenter">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="^:checked Border#SwitchKnobBounds">
+            
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                        <GradientStop Color="#C400E6" Offset="0" />
+                        <GradientStop Color="#6B0099" Offset="1" />
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="^:unchecked Border#OuterBorder">
+            <Setter Property="BorderBrush" Value="#44BE5AFF" />
+        </Style>
+
+
+        <Style Selector="^:pointerover">
+            <Style Selector="^ Border#SwitchKnobBounds">
+            
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <RadialGradientBrush Center="50%,50%" RadiusX="50%" RadiusY="50%">
+                            <GradientStop Color="#C400E6" Offset="0" />
+                            <GradientStop Color="#6B0099" Offset="1" />
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style Selector="^ Border#OuterBorder">
+                <Setter Property="BorderBrush" Value="#44BE5AFF" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:pressed">
+            <Style Selector="^ Border#OuterBorder">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </Style>
+
     </Style>
 </Styles>

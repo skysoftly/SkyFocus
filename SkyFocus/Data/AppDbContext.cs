@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<AppEntity> Apps => Set<AppEntity>();
     public DbSet<DailyAppStatEntity> DailyStats => Set<DailyAppStatEntity>();
+    public DbSet<TrackEntity> Tracks => Set<TrackEntity>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite( $"Data Source={DbPath.GetPath()}");
@@ -22,12 +23,12 @@ public class AppDbContext : DbContext
             entity.HasKey(a => a.Id);
             
             entity.Property(a => a.Name).IsRequired().HasMaxLength(50);
-            entity.Property(a => a.Path).IsRequired().HasMaxLength(250);
+            entity.Property(a => a.Path).IsRequired().HasMaxLength(500);
             entity.HasIndex(a => a.Path).IsUnique();
             
-            entity.Property(a => a.ProcessName).IsRequired().HasMaxLength(50);
-            entity.Property(a => a.IconPath).HasMaxLength(250);
-            entity.Property(a => a.NoteText).HasMaxLength(250);
+            entity.Property(a => a.ProcessName).IsRequired().HasMaxLength(100);
+            entity.Property(a => a.IconPath).HasMaxLength(500);
+            entity.Property(a => a.NoteText).HasMaxLength(1000);
             
             entity.HasIndex(a => a.IsFavorite);
 
@@ -60,6 +61,20 @@ public class AppDbContext : DbContext
                 .WithMany(a => a.DailyStats)
                 .HasForeignKey(d => d.AppId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        
+        modelBuilder.Entity<TrackEntity>(entity =>
+        {
+            entity.ToTable("Track");
+            entity.HasKey(d => d.Id);
+            
+            entity.Property(d => d.ProcessName)
+                .IsRequired()
+                .HasMaxLength(100);
+            
+            entity.HasIndex(a => a.ProcessName).IsUnique();
+
         });
     }
 }

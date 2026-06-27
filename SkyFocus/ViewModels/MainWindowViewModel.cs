@@ -19,19 +19,19 @@ public partial class MainWindowViewModel : ViewModelBase
 
 
     [ObservableProperty] private ViewModelBase _currentPage;
-    [ObservableProperty] private SettingsViewModel _settings;
 
     private MainPageViewModel _mainPage;
     private ChartPageViewModel _chartPage;
+    private SettingsPageViewModel _settingsPage;
 
 
-    public MainWindowViewModel(MainPageViewModel mainPageViewModel, ChartPageViewModel chartPageViewModel, SettingsViewModel settingsViewModel, TrackingService tracking, WindowBarViewModel windowBar)
+    public MainWindowViewModel(MainPageViewModel mainPageViewModel, ChartPageViewModel chartPageViewModel, SettingsPageViewModel settingsPageViewModel, TrackingService tracking, WindowBarViewModel windowBar)
     {
         _mainPage = mainPageViewModel;
         _chartPage = chartPageViewModel;
+        _settingsPage = settingsPageViewModel;
         TrackingService = tracking;
         WindowBar = windowBar;
-        Settings = settingsViewModel;
         
         CurrentPage = _mainPage;
     }
@@ -45,6 +45,14 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SelectChartPage()
     {
+        _ = _chartPage.UpdateChart();
         CurrentPage = _chartPage;
+    }
+    
+    [RelayCommand]
+    private void SelectSettingsPage()
+    {
+        _ = _settingsPage.Update();
+        CurrentPage = _settingsPage;
     }
 }
