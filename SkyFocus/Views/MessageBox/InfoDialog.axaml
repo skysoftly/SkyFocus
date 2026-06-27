@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent">
     <Border Classes="DialogPanel">
-        <Grid Margin="20" RowDefinitions="Auto Auto" RowSpacing="10" VerticalAlignment="Center">
+        <Grid Margin="0 20" RowDefinitions="Auto Auto" RowSpacing="10" VerticalAlignment="Center">
             <TextBlock Grid.Row="0" x:Name="Title" 
                        Text="Внимание!" 
                        MaxLines="3"
@@ -18,7 +18,7 @@
                        TextWrapping="Wrap"
                        TextAlignment="Center"
                        TextTrimming="CharacterEllipsis"/>
-            <Grid Grid.Row="1" ColumnDefinitions="*" HorizontalAlignment="Center" ColumnSpacing="10">
+            <Grid Grid.Row="1" ColumnDefinitions="*" HorizontalAlignment="Center" ColumnSpacing="10" Margin="20 0">
                 <Button Grid.Column="0" Content="Подтвердить" Click="OnYesClick" HorizontalAlignment="Stretch" Width="120" Classes="primary" HorizontalContentAlignment="Center"/>
             </Grid>
         </Grid>

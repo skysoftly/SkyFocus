@@ -272,7 +272,7 @@ public partial class AppInfoViewModel : ViewModelBase
                 await _appDbService.UpdateAppAsync(SelectedApp);
 
                 // Обновляем иконку
-                await _appService.ResetIcon(SelectedApp);
+                // await _appService.ResetIcon(SelectedApp);
             });
         }
         catch (Exception ex)

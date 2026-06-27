@@ -35,10 +35,14 @@
                                     Command="{Binding SelectChartPageCommand}">
                                 <Image Source="/Assets/Icons/graph.png" />
                             </Button>
+                            <Button Classes="primary" Width="40" Height="40"
+                                    Command="{Binding SelectSettingsPageCommand}">
+                                <Image Source="/Assets/Icons/settings.png" />
+                            </Button>
                         </StackPanel>
 
 
-                        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" />
+                        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
                     </Grid>
                     <Grid Grid.Row="1"
                           VerticalAlignment="Center" Margin="5"
@@ -71,18 +75,12 @@
 
                                 <TextBlock Text="{x:Static utils:AppInfo.Version}" Classes="caption"
                                            VerticalAlignment="Center" />
-                                <Button Classes="transparent-btn-caption" Content="⫶☰" 
-                                        Margin="0 -10 0 0"
-                                        Command="{Binding Settings.EnableCommand}">
-                                    <!-- <TextBlock Text="⫶☰" Classes="caption" FontSize="20" VerticalAlignment="Center" /> -->
-                                </Button>
                             </StackPanel>
                         </Grid>
 
                     </Grid>
                 </Grid>
                 
-                <ContentControl Content="{Binding Settings}"/>
                 <ContentControl Content="{Binding WindowBar}" VerticalAlignment="Top" Height="50"/>
             </Grid>
         </Border>

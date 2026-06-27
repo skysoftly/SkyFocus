@@ -44,6 +44,8 @@ public partial class AppService : ObservableObject
 
         trackingService.RunningAppsChanged += OnRunningAppsChanged;
         trackingService.ActiveAppChanged += OnActiveAppChanged;
+
+        trackingService.AppAddedToTracking += AddAppPath;
     }
 
     private async Task LoadApps()
@@ -155,7 +157,6 @@ public partial class AppService : ObservableObject
             var existingByPath = await _appDbService.GetByPathAsync(filePath);
             if (existingByPath != null)
             {
-
                 await Dispatcher.UIThread.InvokeAsync(async () =>
                 {
                     var dialog = new InfoDialog($"{Path.GetFileNameWithoutExtension(filePath)} уже добавлен!");
@@ -163,7 +164,7 @@ public partial class AppService : ObservableObject
                 });
                 continue;
             }
-        
+
 
             var app = new AppRowDto
             {
@@ -175,11 +176,42 @@ public partial class AppService : ObservableObject
             await _appDbService.AddAsync(app);
 
             await ResetIcon(app);
-        
+
             _apps.Add(app);
         }
+
         Sort();
     }
+
+    public async void AddAppPath(string filePath)
+    {
+        var existingByPath = await _appDbService.GetByPathAsync(filePath);
+        if (existingByPath != null)
+        {
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var dialog = new InfoDialog($"{Path.GetFileNameWithoutExtension(filePath)} уже добавлен!");
+                await dialog.ShowDialog(App.MainWindow!);
+            });
+            return;
+        }
+
+
+        var app = new AppRowDto
+        {
+            Name = Path.GetFileNameWithoutExtension(filePath),
+            Path = filePath,
+            ProcessName = TrackingService.CleanName(Path.GetFileNameWithoutExtension(filePath))
+        };
+
+        await _appDbService.AddAsync(app);
+
+        await ResetIcon(app);
+
+        _apps.Add(app);
+        Sort();
+    }
+
 
     public async Task ToggleFavorite(AppRowDto app)
     {
@@ -195,16 +227,16 @@ public partial class AppService : ObservableObject
             return await dialog.ShowDialog<bool>(App.MainWindow!);
         });
         if (!ok) return false;
-        
+
         _apps.Remove(selectedApp);
         FilteredApps.Remove(selectedApp);
         SelectedApp = null;
         await _appDbService.RemoveAppAsync(selectedApp.Id);
-        
+
         return true;
     }
-    
-    
+
+
     private async Task LoadIconAsync(AppRowDto app)
     {
         try
@@ -228,8 +260,8 @@ public partial class AppService : ObservableObject
             Console.WriteLine($"Icon error for {app.Name}: {ex.Message}");
         }
     }
-    
-    
+
+
     public async Task EditIcon()
     {
         if (SelectedApp == null) return;
@@ -256,11 +288,11 @@ public partial class AppService : ObservableObject
     {
         // Удаляем кастомную иконку
         IconService.DeleteIcon(app.Id);
-        
+
         // Загружаем заново из exe
         await LoadIconAsync(app);
     }
-    
+
     public async Task<List<AppRowDto>> GetTopAppsAsync(int count = 5)
     {
         var apps = await _appDbService.LoadAppsWithTodayStatsAsync();

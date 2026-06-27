@@ -1,0 +1,55 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SkyFocus.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
+             x:Class="SkyFocus.Views.SettingsPageView"
+             x:DataType="vm:SettingsPageViewModel">
+
+    <Border Classes="Tile">
+        <Grid RowDefinitions="Auto *" ColumnDefinitions="* *" Margin="10">
+
+            <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Grid.Column="0" Text="Общие настройки" Classes="h4" />
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="* *" ColumnSpacing="10">
+                        <Border Classes="TileInto">
+                            <StackPanel Margin="10" Spacing="10">
+                                <TextBlock Text="Запуск системы" Classes="info-TextBlock h4"/>
+                                <Border Grid.Column="1" Classes="TileInto">
+                                    <Grid Margin="10" >
+                                        <StackPanel Spacing="5">
+                                            <TextBlock Text="Автозагрузка" Classes="h5"/>
+                                            <TextBlock Text="Запускать приложение при старте системы" Classes="caption"/>
+                                        </StackPanel>
+                                        <ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding IsAutoStart}"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        
+                        <Border Grid.Column="1" Classes="TileInto">
+                            <StackPanel Margin="10" Spacing="10">
+                                <TextBlock Text="Уведомления" Classes="info-TextBlock h4"/>
+                                <Border Grid.Column="1" Classes="TileInto">
+                                    <Grid Margin="10" >
+                                        <StackPanel Spacing="5">
+                                            <TextBlock Text="Предложения по отслеживанию" Classes="h5"/>
+                                            <TextBlock Text="Запрашивать добавление новых приложений в список отслеживания." Classes="caption"/>
+                                        </StackPanel>
+                                        <ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding IsTrackingNotify}"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" Content="Сохранить изменения" Classes="primary" HorizontalAlignment="Right"/>
+        </Grid>
+    </Border>
+</UserControl>
