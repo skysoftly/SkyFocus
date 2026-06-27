@@ -19,17 +19,19 @@ public partial class MainWindowViewModel : ViewModelBase
 
 
     [ObservableProperty] private ViewModelBase _currentPage;
+    [ObservableProperty] private SettingsViewModel _settings;
 
     private MainPageViewModel _mainPage;
     private ChartPageViewModel _chartPage;
 
 
-    public MainWindowViewModel(MainPageViewModel mainPageViewModel, ChartPageViewModel chartPageViewModel, TrackingService tracking, WindowBarViewModel windowBar)
+    public MainWindowViewModel(MainPageViewModel mainPageViewModel, ChartPageViewModel chartPageViewModel, SettingsViewModel settingsViewModel, TrackingService tracking, WindowBarViewModel windowBar)
     {
         _mainPage = mainPageViewModel;
         _chartPage = chartPageViewModel;
         TrackingService = tracking;
         WindowBar = windowBar;
+        Settings = settingsViewModel;
         
         CurrentPage = _mainPage;
     }

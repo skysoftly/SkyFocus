@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 
 namespace SkyFocus.Services;
 
@@ -9,10 +10,8 @@ public static class FilePickerService
 {
     public static async Task<string?> PickExeFileAsync()
     {
-        try
+        return await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await Task.Delay(100);
-            
             var files = await App.MainWindow!.StorageProvider
                 .OpenFilePickerAsync(
                     new FilePickerOpenOptions
@@ -26,55 +25,18 @@ public static class FilePickerService
                                 Patterns = new[] { "*.exe", "*.url" }
                             }
                         }
-                    })
-                .ConfigureAwait(false);
+                    });
 
             return files.Count > 0 ? files[0].Path.LocalPath : null;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка: {ex.Message}");
-            return null;
-        }
+        });
     }
     
-    public static async Task<string?> PickImageFileAsync()
-    {
-        try
-        {
-            await Task.Delay(100);
-            
-            var files = await App.MainWindow!.StorageProvider
-                .OpenFilePickerAsync(
-                    new FilePickerOpenOptions
-                    {
-                        Title = "Выберите изображение",
-                        AllowMultiple = false,
-                        FileTypeFilter = new[]
-                        {
-                            new FilePickerFileType("Изображения")
-                            {
-                                Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
-                            }
-                        }
-                    })
-                .ConfigureAwait(false);
-
-            return files.Count > 0 ? files[0].Path.LocalPath : null;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка: {ex.Message}");
-            return null;
-        }
-    }
-
+    
     public static async Task<List<string>?> PickExeFilesAsync()
     {
-        try
+        return await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await Task.Delay(100);
-            
+
             var files = await App.MainWindow!.StorageProvider
                 .OpenFilePickerAsync(
                     new FilePickerOpenOptions
@@ -88,24 +50,42 @@ public static class FilePickerService
                                 Patterns = new[] { "*.exe", "*.url" }
                             }
                         }
-                    })
-                .ConfigureAwait(false);
+                    });
 
-            if (files.Count < 0) return null;
-            
+            if (files.Count == 0) return null;
+
             var filePaths = new List<string>();
-
-            foreach (var filePath in files)
+            foreach (var file in files)
             {
-                filePaths.Add(filePath.Path.LocalPath);
+                filePaths.Add(file.Path.LocalPath);
             }
-            
+
             return filePaths;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка: {ex.Message}");
-            return null;
-        }
+        });
     }
+
+    public static async Task<string?> PickImageFileAsync()
+    {
+        return await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+
+            var files = await App.MainWindow!.StorageProvider
+                .OpenFilePickerAsync(
+                    new FilePickerOpenOptions
+                    {
+                        Title = "Выберите изображение",
+                        AllowMultiple = false,
+                        FileTypeFilter = new[]
+                        {
+                            new FilePickerFileType("Изображения")
+                            {
+                                Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                            }
+                        }
+                    });
+
+            return files.Count > 0 ? files[0].Path.LocalPath : null;
+        });
+    }
+
 }

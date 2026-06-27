@@ -155,9 +155,12 @@ public partial class AppService : ObservableObject
             var existingByPath = await _appDbService.GetByPathAsync(filePath);
             if (existingByPath != null)
             {
-                var dialog = new InfoDialog($"{Path.GetFileNameWithoutExtension(filePath)} уже добавлен!");
-                await dialog.ShowDialog(App.MainWindow!);
 
+                await Dispatcher.UIThread.InvokeAsync(async () =>
+                {
+                    var dialog = new InfoDialog($"{Path.GetFileNameWithoutExtension(filePath)} уже добавлен!");
+                    await dialog.ShowDialog(App.MainWindow!);
+                });
                 continue;
             }
         
@@ -186,9 +189,11 @@ public partial class AppService : ObservableObject
 
     public async Task<bool> Delete(AppRowDto selectedApp)
     {
-        var dialog = new ConfirmDialog("Вы уверены?");
-        var ok = await dialog.ShowDialog<bool>(App.MainWindow!);
-
+        var ok = await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            var dialog = new ConfirmDialog("Вы уверены?");
+            return await dialog.ShowDialog<bool>(App.MainWindow!);
+        });
         if (!ok) return false;
         
         _apps.Remove(selectedApp);
