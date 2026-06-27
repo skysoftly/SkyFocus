@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-            <Version>0.1.3-alpha</Version>
+            <Version>0.1.4-alpha</Version>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
 
 
