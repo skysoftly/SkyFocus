@@ -167,8 +167,7 @@ public partial class TrackingService : ObservableObject
         }
 
         var displayName = string.IsNullOrEmpty(processName) ? "приложение" : processName;
-
-        Dispatcher.UIThread.Post(async void () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {

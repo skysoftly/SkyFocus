@@ -62,12 +62,12 @@
                               ColumnDefinitions="* *"
                               Margin="10 5"
                               VerticalAlignment="Center">
-                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock Text="⟳" Classes="caption" FontSize="16" Margin="0 -6 0 0"
-                                           VerticalAlignment="Center" />
-                                <TextBlock Text="Синхронизация: 2 мин. назад" Classes="caption"
-                                           VerticalAlignment="Center" />
-                            </StackPanel>
+                            <!-- <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5"> -->
+                            <!--     <TextBlock Text="⟳" Classes="caption" FontSize="16" Margin="0 -6 0 0" -->
+                            <!--                VerticalAlignment="Center" /> -->
+                            <!--     <TextBlock Text="Синхронизация: 2 мин. назад" Classes="caption" -->
+                            <!--                VerticalAlignment="Center" /> -->
+                            <!-- </StackPanel> -->
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20"
                                         HorizontalAlignment="Right">

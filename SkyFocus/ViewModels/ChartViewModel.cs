@@ -94,8 +94,11 @@ public partial class ChartViewModel : ViewModelBase
         switch (SelectedPeriod.Type)
         {
             case PeriodType.CalendarWeek:
-                startDate = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-                endDate = startDate.AddDays(6);
+                var daysUntilMonday = ((int)today.DayOfWeek + 6) % 7; // Сколько дней до понедельника
+                var weekStart = today.AddDays(-daysUntilMonday);
+                var weekEnd = weekStart.AddDays(6);
+                startDate = weekStart;
+                endDate = weekEnd;
                 break;
 
             case PeriodType.Last7Days:
