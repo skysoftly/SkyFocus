@@ -52,7 +52,9 @@ public partial class App : Application
             MainWindow = mainWindow;
             desktop.MainWindow = mainWindow;
 
+            
             LoadWindowSettings(settings);
+            
             mainWindow.Closing += (_, _) => SaveWindowSettings(settings);
 
             // Запускаем трекер
@@ -64,10 +66,29 @@ public partial class App : Application
             tray.Init();
 
             // _ = GenerateTestDataWithTodayAsync();
+            CheckAutoStart();
+            
+            
+            var args = Environment.GetCommandLineArgs();
+            var minimized = args.Contains("--minimized");
+            Console.WriteLine($"Minimized: {minimized}");
+
+            if (minimized)
+            {
+                Task.Run(async () =>
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        Console.WriteLine("Hiding window...");
+                        mainWindow.Hide();
+                        mainWindow.ShowInTaskbar = false;
+                        Console.WriteLine($"Window is visible: {mainWindow.IsVisible}");
+                    });
+                });
+            }
         }
         
         
-        CheckAutoStart();
 
         base.OnFrameworkInitializationCompleted();
     }

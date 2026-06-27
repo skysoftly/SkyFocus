@@ -24,7 +24,6 @@ public partial class TrackingService : ObservableObject
 
     private static readonly HashSet<string> _systemProcesses = new(StringComparer.OrdinalIgnoreCase)
     {
-        "skyfocus",
         "explorer",
         "searchapp",
         "searchhost",
@@ -47,7 +46,8 @@ public partial class TrackingService : ObservableObject
         "taskmgr",
         "procexp",
         "procexp64",
-        "screenclippinghost"
+        "screenclippinghost",
+        "openwith"
     };
 
     public event Action<string>? AppAddedToTracking;
@@ -123,7 +123,7 @@ public partial class TrackingService : ObservableObject
                 Console.WriteLine($"Process: {name}");
                 ActiveAppChanged?.Invoke(_lastName, name);
 
-                if (!_trackApps.Contains(name) && !_systemProcesses.Contains(name) &&
+                if (!name.Contains("skyfocus") && !_trackApps.Contains(name) && !_systemProcesses.Contains(name) &&
                     _settingsService.Get("IsTrackingNotify", false))
                 {
                     _trackApps.Add(name);

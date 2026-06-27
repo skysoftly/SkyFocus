@@ -26,7 +26,7 @@
                     <TextBlock Grid.Row="1"
                                Text="{Binding TotalSecondsToday, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeToday, Converter={StaticResource GreaterThanZeroConverter}}">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasChangeToday}">
                         <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeTodayDisplay}" IsChecked="{Binding ChangeTodayUp}" />
                         <controls:StateTextBlock Classes="caption" ActiveText="больше, чем вчера" InactiveText="меньше, чем вчера" IsChecked="{Binding ChangeTodayUp}" Margin="5 0"/>
                     </StackPanel>
@@ -39,7 +39,7 @@
                     <TextBlock Grid.Row="1"
                                Text="{Binding TotalSecondsWeek, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeWeek, Converter={StaticResource GreaterThanZeroConverter}}">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasChangeWeek}">
                         <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeWeekDisplay}" IsChecked="{Binding ChangeWeekUp}" />
                         <controls:StateTextBlock Classes="caption" ActiveText="больше, чем на прошлой" InactiveText="меньше, чем на прошлой" IsChecked="{Binding ChangeWeekUp}" Margin="5 0"/>
                     </StackPanel>
@@ -52,7 +52,7 @@
                     <TextBlock Grid.Row="1"
                                Text="{Binding TotalSecondsMonth, Converter={StaticResource SecondsToTimeString}}"
                                FontSize="15" FontWeight="Bold" />
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding PercentChangeMonth, Converter={StaticResource GreaterThanZeroConverter}}">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasChangeMonth}">
                         <controls:StateTextBlock Classes="caption_color" Text="{Binding ChangeMonthDisplay}" IsChecked="{Binding ChangeMonthUp}" />
                         <controls:StateTextBlock Classes="caption" ActiveText="больше, чем в прошлом" InactiveText="меньше, чем в прошлом" IsChecked="{Binding ChangeMonthUp}" Margin="5 0"/>
                     </StackPanel>
