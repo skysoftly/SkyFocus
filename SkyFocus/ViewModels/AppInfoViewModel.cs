@@ -245,8 +245,11 @@ public partial class AppInfoViewModel : ViewModelBase
                 // Проверка длины пути
                 if (filePath.Length >= 250)
                 {
-                    var dialog = new InfoDialog("Путь слишком длинный!");
-                    await dialog.ShowDialog(App.MainWindow!);
+                    await Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        var dialog = new InfoDialog("Путь слишком длинный!");
+                        await dialog.ShowDialog(App.MainWindow!);
+                    });
                     return;
                 }
 
@@ -254,8 +257,11 @@ public partial class AppInfoViewModel : ViewModelBase
                 var existingByPath = await _appDbService.GetByPathAsync(filePath);
                 if (existingByPath != null && existingByPath.Id != SelectedApp.Id)
                 {
-                    var dialog = new InfoDialog("Это приложение уже добавлено!");
-                    await dialog.ShowDialog(App.MainWindow!);
+                    await Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        var dialog = new InfoDialog("Это приложение уже добавлено!");
+                        await dialog.ShowDialog(App.MainWindow!);
+                    });
                     return;
                 }
 
@@ -272,8 +278,11 @@ public partial class AppInfoViewModel : ViewModelBase
         catch (Exception ex)
         {
             Console.WriteLine($"EditPath error: {ex.Message}");
-            var dialog = new InfoDialog($"Ошибка: {ex.Message}");
-            await dialog.ShowDialog(App.MainWindow!);
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var infoDialog = new InfoDialog($"Ошибка: {ex.Message}");
+                await infoDialog.ShowDialog(App.MainWindow!);
+            });
         }
     }
 
@@ -303,11 +312,11 @@ public partial class AppInfoViewModel : ViewModelBase
         catch (Exception ex)
         {
             // Отменено
-            // await Dispatcher.UIThread.InvokeAsync(async () =>
-            // {
-            //     var infoDialog = new InfoDialog($"Ошибка: {ex.Message}");
-            //     await infoDialog.ShowDialog(App.MainWindow!);
-            // });
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var infoDialog = new InfoDialog($"Ошибка: {ex.Message}");
+                await infoDialog.ShowDialog(App.MainWindow!);
+            });
         }
     }
 
