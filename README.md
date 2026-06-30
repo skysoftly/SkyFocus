@@ -1,7 +1,7 @@
 # SkyFocus
 ### Менеджер приложений и учёта времени
 
-[![Version](https://img.shields.io/badge/version-0.1.3--alpha-blue)](https://github.com/skysoftly/SkyFocus/releases)
+[![Version](https://img.shields.io/badge/version-0.1.4--alpha-blue)](https://github.com/skysoftly/SkyFocus/releases)
 
 **SkyFocus** — это десктопное приложение для отслеживания времени, которое вы проводите за приложениями и играми. Оно помогает анализировать вашу цифровую активность, выявлять "пожирателей времени" и лучше планировать свой день.
 
